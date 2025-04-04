@@ -1,18 +1,27 @@
+import java.util.ArrayList; // import the ArrayList class
+import java.util.Scanner;
+import java.time.LocalDateTime; // Import the LocalDateTime class, 
+import java.time.format.DateTimeFormatter; // Import the DateTimeFormatter class
+
+/* Before Formatting: 2025-04-04T16:08:20.597585
+After Formatting: 04-04-2025 16:08:20 */
 
 public class Order {
-	protected String iName, iId, iType;
-	protected double iPrice;
-	protected int iQty;
+	protected String orderID, orderTime;
+	protected double orderPrice;
+	protected int orderQty;
+	
+	ArrayList<Order> orders = new ArrayList<Order>(); // Create an ArrayList object
+
 	
 	public Order() {
 		
 	}
 	
-	public Order(String iName, String iId, String iType, double iPrice, int iQty) {
-		this.iName = iName;
-		this.iId = iId;
-		this.iType = iType;
-		this.iPrice = iPrice;
-		this.iQty = iQty;
+	public Order(String orderID, String orderTime, double orderPrice, int orderQty) {
+		this.orderID = orderID;
+		this.orderTime = orderTime;
+		this.orderPrice = orderPrice;
+		this.orderQty = orderQty;
 	}
 }
