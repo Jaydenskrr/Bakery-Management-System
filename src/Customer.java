@@ -3,7 +3,7 @@ import java.util.*;
 public class Customer 
 {
 	private String userId, userName;
-	private int custNo;
+	private int custNo, points;
 	
 	public Customer(String userId, String userName, int  custNo)
 	{
@@ -39,6 +39,9 @@ public class Customer
 	al.add(new Customer("004", "Siew", 011111111));
 	}
 	
-	
+	public void setPoints(int points)
+	{
+		this.points = points;
+	}
 	
 }
