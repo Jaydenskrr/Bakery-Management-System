@@ -2,14 +2,13 @@ import java.util.*;
 
 public class Customer 
 {
-	private String userId, userName, userPw;
+	private String userId, userName;
 	private int custNo;
 	
-	public Customer(String userId, String userName, String userPw, int  custNo)
+	public Customer(String userId, String userName, int  custNo)
 	{
 		this.userId = userId;
 		this.userName = userName;
-		this.userPw = userPw;
 		this.custNo = custNo;
 	}
 	
@@ -24,10 +23,6 @@ public class Customer
 		return userName;
 	}
 	
-	public String getPw()
-	{
-		return userPw;
-	}
 	
 	public int getNo()
 	{
@@ -36,7 +31,14 @@ public class Customer
 	
 	ArrayList<Customer> al = new ArrayList<Customer>();
 	
-	public void define
-	al.add(new Customer("001", "Jayden", "abc123", 011111000));
-
+	public void custInfo()
+	{
+	al.add(new Customer("001", "Jayden", 011111000));
+	al.add(new Customer("002", "JJ", 011111100));
+	al.add(new Customer("003", "Mateen", 011111110));
+	al.add(new Customer("004", "Siew", 011111111));
+	}
+	
+	
+	
 }
