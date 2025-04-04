@@ -14,27 +14,29 @@ public class Customer
 	}
 	
 	
-	public String getId(String userId)
+	public String getId()
 	{
 		return userId;
 	}
 	
-	public String getName(String userName)
+	public String getName()
 	{
 		return userName;
 	}
 	
-	public String getPw(String userPw)
+	public String getPw()
 	{
 		return userPw;
 	}
 	
-	public int getNo(int custNo)
+	public int getNo()
 	{
 		return custNo;
 	}
 	
 	ArrayList<Customer> al = new ArrayList<Customer>();
+	
+	public void define
 	al.add(new Customer("001", "Jayden", "abc123", 011111000));
 
 }
