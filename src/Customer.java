@@ -37,6 +37,6 @@ public class Customer
 	ArrayList<Customer> al = new ArrayList<Customer>();
 	
 	public void define
-	al.add(new Customer("001", "Jayden", "abc123", 011111000));
+	al.add(new Customer("001", "Jayden", "abc123", 011111000));
 
 }
