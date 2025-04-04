@@ -5,7 +5,7 @@ public class Customer
 	private String userId, userName, userPw;
 	private int custNo;
 	
-	public void Custormer(String userId, String userName, String userPw, int  custNo)
+	public Customer(String userId, String userName, String userPw, int  custNo)
 	{
 		this.userId = userId;
 		this.userName = userName;
@@ -14,27 +14,27 @@ public class Customer
 	}
 	
 	
-	public void getId(String userId)
+	public String getId(String userId)
 	{
-		
+		return userId;
 	}
 	
-	public void getName(String userName)
+	public String getName(String userName)
 	{
-		
+		return userName;
 	}
 	
-	public void getPw(String userPw)
+	public String getPw(String userPw)
 	{
-		
+		return userPw;
 	}
 	
-	public void getNo(int custNo)
+	public int getNo(int custNo)
 	{
-		
+		return custNo;
 	}
 	
 	ArrayList<Customer> al = new ArrayList<Customer>();
-	al.add(new Customer());
+	al.add(new Customer("001", "Jayden", "abc123", 011111000));
 
 }
