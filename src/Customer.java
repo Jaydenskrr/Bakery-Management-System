@@ -37,11 +37,9 @@ public class Customer
 	al.add(new Customer("002", "JJ", 011111100));
 	al.add(new Customer("003", "Mateen", 011111110));
 	al.add(new Customer("004", "Siew", 011111111));
+	al.add(new Customer("000", "Guest", 0));
 	}
 	
-	public void setPoints(int points)
-	{
-		this.points = points;
-	}
+	
 	
 }
