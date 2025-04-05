@@ -5,10 +5,12 @@ public class Customer
 	private String userId, userName;
 	private int custNo, points;
 	
+	// defining constructor
 	public Customer(String userId, String userName, int  custNo, int points)
 	{
 		
 	}
+	
 	
 	public void setCustomer(String userId, String userName, int  custNo, int points)
 	{
