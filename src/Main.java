@@ -5,6 +5,9 @@ public class Main {
 	public static void main(String[] args) {
 		
 		mainPage(); //Display Main page (options)
+		
+		Customer c = new Customer();
+		c.displayCustInfo();
 			
 	}
 	

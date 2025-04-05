@@ -11,8 +11,9 @@ public class Order {
 	protected double orderPrice;
 	protected int orderQty;
 	
-	ArrayList<Order> orders = new ArrayList<Order>(); // Create an ArrayList object
-//	orders = [];
+//	ArrayList<Order> orders = new ArrayList<Order>(); // Create an ArrayList object
+	
+	//add item to menu
 	
 	public Order() {
 		
@@ -24,6 +25,5 @@ public class Order {
 		this.orderPrice = orderPrice;
 		this.orderQty = orderQty;
 	}
-	
 	
 }

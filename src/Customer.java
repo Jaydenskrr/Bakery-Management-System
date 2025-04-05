@@ -54,7 +54,7 @@ public class Customer
 	
 	public void displayCustInfo()
 	{
-		for (int i = 0; i<cInfo.size(); i++)
+		for (int i = 0; i < cInfo.size(); i++)
 		{
 			System.out.println(i+1 + ". " + cInfo.get(i) );
 		}
