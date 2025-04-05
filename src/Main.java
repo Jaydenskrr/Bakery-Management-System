@@ -5,7 +5,6 @@ public class Main {
 	public static void main(String[] args) {
 		
 		mainPage(); //Display Main page (options)
-//		option1(); //Get option from user and directs to the page/function
 			
 	}
 	
