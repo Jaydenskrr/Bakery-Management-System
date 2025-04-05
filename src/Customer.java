@@ -50,11 +50,11 @@ public class Customer
 	
 	public void custInfo()
 	{
-	cInfo.add(new Customer("001", "Jayden", 011111000, 0));
-	cInfo.add(new Customer("002", "JJ", 011111100, 0));
-	cInfo.add(new Customer("003", "Mateen", 011111110, 0));
-	cInfo.add(new Customer("004", "Siew", 011111111, 0));
-	cInfo.add(new Customer("000", "Guest", 0, 0));
+		cInfo.add(new Customer("001", "Jayden", 011111000, 0));
+		cInfo.add(new Customer("002", "JJ", 011111100, 0));
+		cInfo.add(new Customer("003", "Mateen", 011111110, 0));
+		cInfo.add(new Customer("004", "Siew", 011111111, 0));
+		cInfo.add(new Customer("000", "Guest", 0, 0));
 	}
 	
 	
@@ -66,9 +66,5 @@ public class Customer
 			System.out.println((cInfo.get(i)).toString());
 		}
 		
-	}
-	
-	
-	
-	
+	}	
 }
