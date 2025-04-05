@@ -9,9 +9,7 @@ After Formatting: 04-04-2025 16:08:20 */
 public class Order {
 	protected String orderID, orderTime;
 	protected double orderPrice;
-	protected int orderQty;
-	
-//	ArrayList<Order> orders = new ArrayList<Order>(); // Create an ArrayList object
+	protected int orderIdCtr, orderQty;
 	
 	//add item to menu
 	
@@ -26,4 +24,12 @@ public class Order {
 		this.orderQty = orderQty;
 	}
 	
+	
+	/* Order */
+	ArrayList<Order> orders = new ArrayList<Order>(); // Create an ArrayList object
+	
+	public void createOrder() {
+		//While loop to add item into cart
+		
+	}
 }
