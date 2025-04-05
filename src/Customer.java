@@ -2,8 +2,8 @@ import java.util.*;
 
 public class Customer 
 {
-	private String userId, userName;
-	private int custNo, points;
+	private String userId, userName, custNo;
+	private int points;
 	
 	public Customer()
 	{
@@ -11,13 +11,13 @@ public class Customer
 	}
 	
 	// defining constructor
-	public Customer(String userId, String userName, int  custNo, int points)
+	public Customer(String userId, String userName, String custNo, int points)
 	{
 		
 	}
 	
 	
-	public void setCustomer(String userId, String userName, int  custNo, int points)
+	public void setCustomer(String userId, String userName, String custNo, int points)
 	{
 		this.userId = userId;
 		this.userName = userName;
@@ -36,7 +36,7 @@ public class Customer
 	}
 	
 	
-	public int getNo()
+	public String getNo()
 	{
 		return custNo;
 	}
@@ -50,11 +50,11 @@ public class Customer
 	
 	public void custInfo()
 	{
-		cInfo.add(new Customer("001", "Jayden", 011111000, 0));
-		cInfo.add(new Customer("002", "JJ", 011111100, 0));
-		cInfo.add(new Customer("003", "Mateen", 011111110, 0));
-		cInfo.add(new Customer("004", "Siew", 011111111, 0));
-		cInfo.add(new Customer("000", "Guest", 0, 0));
+		cInfo.add(new Customer("000", "Guest", "", 0));
+		cInfo.add(new Customer("001", "Jayden", "0119876123", 0));
+		cInfo.add(new Customer("002", "JJ", "0119876123", 0));
+		cInfo.add(new Customer("003", "Mateen", "0119876123", 0));
+		cInfo.add(new Customer("004", "Siew", "0119876123", 0));
 	}
 	
 	
