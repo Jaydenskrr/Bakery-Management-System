@@ -13,10 +13,13 @@ public class Customer
 	// defining constructor
 	public Customer(String userId, String userName, String custNo, int points)
 	{
-		
+		this.userId = userId;
+		this.userName = userName;
+		this.custNo = custNo;
+		this.points = points;
 	}
 	
-	
+	/* Setter and Getter */
 	public void setCustomer(String userId, String userName, String custNo, int points)
 	{
 		this.userId = userId;
@@ -26,26 +29,18 @@ public class Customer
 	}
 	
 	public String getId()
-	{
-		return userId;
-	}
+	{	return userId;	}
 	
 	public String getName()
-	{
-		return userName;
-	}
-	
+	{	return userName;}
 	
 	public String getNo()
-	{
-		return custNo;
-	}
+	{	return custNo;	}
 	
 	public int getPoints()
-	{
-		return points;
-	}
+	{	return points;	}
 	
+	/* Customer Information */
 	ArrayList<Customer> cInfo = new ArrayList<Customer>();
 	
 	public void custInfo()
@@ -59,10 +54,11 @@ public class Customer
 	
 	
 	
-	public void displayCustInfo()
-	{
-		for (int i = 0; i < cInfo.size(); i++)
-		{
+	public void displayCustInfo() {
+		custInfo();
+		System.out.println("Customer Info");
+		for (int i = 0; i < cInfo.size(); i++) {
+			
 			System.out.println((cInfo.get(i)).toString());
 		}
 		
