@@ -76,9 +76,29 @@ public class Report
             System.out.println("ID: " + item.getiId() + " | Name: " + item.getiName() + " | Type: " + item.getiType() + " | Price: RM" + item.getiPrice() + " | Qty: " + item.getiQty());
         }
     }
-   
-    
-    
+    public static void main(String[] args) {
+        // Create sample data
+        Report report = new Report("null", "null", "null", 0, 0);
+        report.defineItemData();
+
+        // Customer C1 = new Customer("001", "Jayden", 1111);
+        // Customer C2 = new Customer("002", "Wai Choong", 1112);
+
+        double totalSales = 0.00;
+
+        // Customers place orders
+        // jayden.orderItem("B01", 1, report.itemList);
+        // aiman.orderItem("301", 2, report.itemList);
+
+        // Generate Daily Sales Report (can include more customers here)
+        System.out.println("\n=== Daily Sales Report ===");
+        // Sales: Hardcoding sample orders. Must loop through all customer orders.
+        System.out.println("Order No. N001 Jayden B01 Red Bean Bun x 1 RM5.99");
+        System.out.println("Order No. N002 Aiman 301 Tiramisu Cake x 2 RM21.98");
+
+        // Print remaining inventory
+        report.printInventory();
+    }
 }
 
     
