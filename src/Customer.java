@@ -57,11 +57,13 @@ public class Customer
 	cInfo.add(new Customer("000", "Guest", 0, 0));
 	}
 	
+	
+	
 	public void displayCustInfo()
 	{
 		for (int i = 0; i < cInfo.size(); i++)
 		{
-			System.out.println(i+1 + ". " + cInfo.get(i) );
+			System.out.println(cInfo.get(i).toString());
 		}
 		
 	}
