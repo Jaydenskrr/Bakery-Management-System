@@ -63,7 +63,7 @@ public class Customer
 	{
 		for (int i = 0; i < cInfo.size(); i++)
 		{
-			System.out.println(cInfo.get(i).toString());
+			System.out.println((cInfo.get(i)).toString());
 		}
 		
 	}
