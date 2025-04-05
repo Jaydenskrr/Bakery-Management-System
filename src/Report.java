@@ -39,19 +39,19 @@ public class Report
 
     }
 
-    public String iName(){
+    public String getiName(){
         return iName;
     }
-    public String iId(){
+    public String getiId(){
         return iId;
     }
-    public String iType(){
+    public String getiType(){
         return iType;
     }
-    public double iPrice(){
+    public double getiPrice(){
         return iPrice;
     }
-    public int iQty(){
+    public int getiQty(){
         return iQty;
     }
 
@@ -70,9 +70,42 @@ public class Report
         itemList.add(new Report("302", "Cheese Cake", "Cake", 10.99, 22));
     }
 
+    public void printInventory(){
+        System.out.println("\n=== Remaining Inventory ===");
+        for (Report item : itemList){
+            System.out.println("ID: " + item.getiId() + " | Name: " + item.getiName() + " | Type: " + item.getiType() + " | Price: RM" + item.getiPrice() + " | Qty: " + item.getiQty());
+        }
+    }
+    public static void main(String[] args) {
+        // Create sample data
+        Report report = new Report("null", "null", "null", 0, 0);
+        report.defineItemData();
+
+        Customer C1 = new Customer("001", "Jayden", 1111);
+        Customer C2 = new Customer("002", "Wai Choong", 1112);
+
+        double totalSales = 0.00;
+
+        // Customers place orders
+        // jayden.orderItem("B01", 1, report.itemList);
+        // aiman.orderItem("301", 2, report.itemList);
+
+        // Generate Daily Sales Report (can include more customers here)
+        System.out.println("\n=== Daily Sales Report ===");
+        // Sales: Hardcoding sample orders. Ideally, you'd loop through all customer orders.
+        System.out.println("Order No. N001 Jayden B01 Red Bean Bun x 1 RM5.99");
+        System.out.println("Order No. N002 Aiman 301 Tiramisu Cake x 2 RM21.98");
+
+        // Print remaining inventory
+        report.printInventory();
+    }
+}
+
+    
+
     
 
 
 
 
-}
+
