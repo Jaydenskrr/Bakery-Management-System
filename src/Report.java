@@ -2,6 +2,30 @@ import java.util.*;
 
 public class Report extends Item
 {
+	
+	private int noSold;
+	private double amtSold;
+	
+	public Report(int noSold, double amtSold)
+	{
+		
+	}
+	
+	public void setReport(int noSold, double amtSold)
+	{
+		this.noSold = noSold;
+		this.amtSold = amtSold;
+	}
+	
+	public int getNoSold()
+	{
+		return noSold;
+	}
+	
+	public double getAmtSold()
+	{
+		return amtSold;
+	}
 
 	public Report(String type, String id, String name, int qty, double price)
 	{
@@ -38,7 +62,7 @@ public class Report extends Item
 	
 	public void statment()
 	{
-		sales.add(new Report(""));
+		sales.add(new Report(0, 0.00));
 	}
 	
 }
