@@ -58,11 +58,13 @@ public class Report extends Item
 
 	}
 	
-	ArrayList<Report> sales = new ArrayList<Report>();
+	ArrayList<ArrayList<Report>> sales = new ArrayList<ArrayList<Report>>();
 	
 	public void statment()
 	{
-		sales.add(new Report(0, 0.00));
+	
+		
+		
 	}
 	
 }
