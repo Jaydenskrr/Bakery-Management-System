@@ -11,7 +11,6 @@ public class Main {
 				System.out.println("Start Ordering");
 				Order o = new Order();
 				o.createOrder();
-				o.createOrder();
 				break;
 				
 			case "2":

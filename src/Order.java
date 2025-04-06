@@ -11,6 +11,8 @@ public class Order {
 	protected int orderCtr = 1;
 	protected boolean flag = true;
 	
+	Scanner sc = new Scanner(System.in);
+	
 	public Order() {
 		
 	}
@@ -28,8 +30,23 @@ public class Order {
 	
 	public void createOrder() {
 		
+		System.out.println("Bakery Member or Guest? (m/g)");
+		String custType = sc.nextLine();
+//		String custType = "m";
+		
+		if (custType.equals("m")) {
+			
+			System.out.println("LIST OF EXISTING MEMBERS");
+			Customer c = new Customer();
+			c.displayCustInfo();
+			
+		} else {
+			System.out.println("LIST OF EXISTING MEMBERS");
+		}
+		
+		
 		orderID = ("ORD-" + String.format("%03d", orderCtr));
-		orderCtr++;
+		
 		systemDT = LocalDateTime.now();
 		
 		//Format System Date and Time
@@ -42,5 +59,7 @@ public class Order {
 		
 		//While loop to add item into cart
 		
+		// ONLY IF ORDER IS SUCCESSFULLY CREATED
+		orderCtr++;
 	}
 }
