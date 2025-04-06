@@ -32,16 +32,18 @@ public class Order {
 		
 		System.out.println("Bakery Member or Guest? (m/g)");
 		String custType = sc.nextLine();
-//		String custType = "m";
 		
 		if (custType.equals("m")) {
 			
 			System.out.println("LIST OF EXISTING MEMBERS");
 			Customer c = new Customer();
 			c.displayCustInfo();
+			System.out.println("Enter Customer ID (E.g.: 001");
+			String cID = sc.nextLine();
+			if (cID.equals(c))
 			
 		} else {
-			System.out.println("LIST OF EXISTING MEMBERS");
+			System.out.println("Continue as guest...");
 		}
 		
 		
@@ -61,5 +63,7 @@ public class Order {
 		
 		// ONLY IF ORDER IS SUCCESSFULLY CREATED
 		orderCtr++;
+		
+		// IF GUEST, POINTS = 0
 	}
 }

@@ -18,6 +18,7 @@ public class Main {
 				break;
 				
 			case "3":
+				System.out.println("LIST OF CUSTOMER");
 				Customer c = new Customer();
 				c.displayCustInfo();
 		}

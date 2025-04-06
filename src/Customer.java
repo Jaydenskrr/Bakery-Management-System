@@ -2,7 +2,7 @@ import java.util.*;
 
 public class Customer 
 {
-	private String userId, userName, custNo;
+	private String userId, userName, custNo, searchID;
 	private int points;
 	
 	public Customer()
@@ -45,22 +45,32 @@ public class Customer
 	
 	public void custInfo()
 	{
-		cInfo.add(new Customer("000", "Guest", "", 0));
+		cInfo.add(new Customer("000", "Guest", "N/A", 0));
 		cInfo.add(new Customer("001", "Jayden", "0119876123", 0));
 		cInfo.add(new Customer("002", "JJ", "0119876123", 0));
 		cInfo.add(new Customer("003", "Mateen", "0119876123", 0));
 		cInfo.add(new Customer("004", "Siew", "0119876123", 0));
 	}
 	
-	
+	public String toString() {
+		return String.format("%-3s | %-10s | %-12s | %-4d", userId, userName, custNo, points);
+	}
 	
 	public void displayCustInfo() {
 		custInfo();
-		System.out.println("Customer Info");
 		for (int i = 0; i < cInfo.size(); i++) {
-			
 			System.out.println((cInfo.get(i)).toString());
 		}
-		
-	}	
+		System.out.println("---End of list---");
+	}
+	
+//	public Customer findCustByID(ArrayList<Customer> cInfo, String searchID) {
+//		
+//		for(int i = 0; i < cInfo.size(); i++) {
+//			if (customer.getId().equals(searchID)) {
+//	            return customer; // Return the matching customer
+//			}
+//		
+//		return
+//	}
 }
