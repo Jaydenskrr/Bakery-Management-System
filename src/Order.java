@@ -9,7 +9,6 @@ public class Order {
 	protected double orderPrice;
 	protected int orderQty;
 	protected int orderCtr = 1;
-	protected boolean flag = true;
 	
 	Scanner sc = new Scanner(System.in);
 	
@@ -30,20 +29,29 @@ public class Order {
 	
 	public void createOrder() {
 		
+		String cID = "";
+		
 		System.out.println("Bakery Member or Guest? (m/g)");
 		String custType = sc.nextLine();
 		
-		if (custType.equals("m")) {
+		if (custType.equals("m")) { // if customer is member
 			
 			System.out.println("LIST OF EXISTING MEMBERS");
 			Customer c = new Customer();
 			c.displayCustInfo();
-			System.out.println("Enter Customer ID (E.g.: 001");
-			String cID = sc.nextLine();
-			if (cID.equals(c))
+			System.out.println("Enter Customer ID: ");
+			cID = sc.nextLine();
+			Customer foundCust = c.findCustByID(cID);
 			
-		} else {
+			if (foundCust != null) {
+				System.out.println("Customer Name: " + foundCust.getName());
+			} else {
+				System.out.println("Member not found. Continue as guest..."); // if member not found, continue as guest
+				cID = "000";
+			}
+		} else { // continue as guest if not member
 			System.out.println("Continue as guest...");
+			cID = "000";
 		}
 		
 		
@@ -57,7 +65,6 @@ public class Order {
 		
 		System.out.println("Order ID: " + orderID);
 		System.out.println("Date/Time: " + orderDT);
-		System.out.println("Customer Name: ");
 		
 		//While loop to add item into cart
 		

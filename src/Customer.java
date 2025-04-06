@@ -64,13 +64,17 @@ public class Customer
 		System.out.println("---End of list---");
 	}
 	
-//	public Customer findCustByID(ArrayList<Customer> cInfo, String searchID) {
-//		
-//		for(int i = 0; i < cInfo.size(); i++) {
-//			if (customer.getId().equals(searchID)) {
-//	            return customer; // Return the matching customer
-//			}
-//		
-//		return
-//	}
+	public Customer findCustByID(String searchID) {
+		
+		for(int i = 0; i < cInfo.size(); i++) {
+			Customer eCustomer = cInfo.get(i);
+			if (eCustomer.getId().equals(searchID)) { //if the existing customer match custId
+	            return eCustomer; //return customer information
+			}
+		}
+		
+		return null;//return null if not found in list
+	}
+	
+
 }
