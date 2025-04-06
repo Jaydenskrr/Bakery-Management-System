@@ -6,11 +6,25 @@ import java.time.format.DateTimeFormatter; // Format date and time
 public class Order {
 	protected String orderID, custID;
 	protected LocalDateTime systemDT;
-	protected double orderPrice;
-	protected int orderQty;
+//	protected double orderPrice;
+//	protected int orderQty;
 	protected int orderCtr = 1;
 	
 	Scanner sc = new Scanner(System.in);
+	
+	private class Cart {
+		String itemID;
+		int orderQty;
+		
+		public Cart() {
+			
+		}
+		
+		public Cart(String itemID, int orderQty) {
+			this.itemID = itemID;
+	        this.orderQty = orderQty;
+		}
+	}
 	
 	public Order() {
 		
@@ -19,13 +33,14 @@ public class Order {
 	public Order(String orderID, LocalDateTime systemDT, double orderPrice, int orderQty) {
 		this.orderID = orderID;
 		this.systemDT = systemDT;
-		this.orderPrice = orderPrice;
-		this.orderQty = orderQty;
+//		this.orderPrice = orderPrice;
+//		this.orderQty = orderQty;
 	}
 	
 	
-	/* Order */
+	/* Order Data*/
 	ArrayList<Order> orders = new ArrayList<Order>(); // ArrayList to store order history
+	ArrayList<Order> cart = new ArrayList<Order>(); // change order data to Cart later
 	
 	public void createOrder() {
 		
@@ -36,9 +51,9 @@ public class Order {
 		
 		if (custType.equals("m")) { // if customer is member
 			
-			System.out.println("LIST OF EXISTING MEMBERS");
 			Customer c = new Customer();
 			c.displayCustInfo();
+			System.out.println("LIST OF EXISTING MEMBERS");
 			System.out.println("Enter Customer ID: ");
 			cID = sc.nextLine();
 			Customer foundCust = c.findCustByID(cID);
@@ -49,6 +64,7 @@ public class Order {
 				System.out.println("Member not found. Continue as guest..."); // if member not found, continue as guest
 				cID = "000";
 			}
+			
 		} else { // continue as guest if not member
 			System.out.println("Continue as guest...");
 			cID = "000";
@@ -67,7 +83,11 @@ public class Order {
 		
 		//Print menu here
 		
-		//Create an arrayList to store orders
+		//Create method for temp orders (cart)
+//		public void addToCart(String itemCode, int quantity) {
+//	        cart.add(new Cart(itemCode, quantity));  // Create CartItem objects
+//	    }
+//		
 		
 		//While loop to add item into cart
 		
