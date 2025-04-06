@@ -25,7 +25,7 @@ public class Order {
 	
 	
 	/* Order */
-	ArrayList<Order> orders = new ArrayList<Order>(); // Create an ArrayList object
+	ArrayList<Order> orders = new ArrayList<Order>(); // ArrayList to store order history
 	
 	public void createOrder() {
 		
@@ -56,7 +56,6 @@ public class Order {
 		
 		
 		orderID = ("ORD-" + String.format("%03d", orderCtr));
-		
 		systemDT = LocalDateTime.now();
 		
 		//Format System Date and Time
@@ -66,11 +65,15 @@ public class Order {
 		System.out.println("Order ID: " + orderID);
 		System.out.println("Date/Time: " + orderDT);
 		
+		//Print menu here
+		
+		//Create an arrayList to store orders
+		
 		//While loop to add item into cart
 		
-		// ONLY IF ORDER IS SUCCESSFULLY CREATED
+		
 		orderCtr++;
 		
-		// IF GUEST, POINTS = 0
+		// IF GUEST, set POINTS = 0
 	}
 }
