@@ -2,10 +2,7 @@
 public abstract class Item 
 {
 	
-	protected String itemType;
-	protected String itemId;
-	protected String itemQty;
-	protected String itemName;
+	protected String itemType, itemId, itemQty, itemName;
 	protected double itemPrice;
 	
 	
