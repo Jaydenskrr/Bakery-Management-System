@@ -1,25 +1,23 @@
-import java.util.ArrayList; // import the ArrayList class
+import java.util.ArrayList;
 import java.util.Scanner;
-import java.time.LocalDateTime; // Import the LocalDateTime class, 
-import java.time.format.DateTimeFormatter; // Import the DateTimeFormatter class
-
-/* Before Formatting: 2025-04-04T16:08:20.597585
-After Formatting: 04-04-2025 16:08:20 */
+import java.time.LocalDateTime; // Get System date and time
+import java.time.format.DateTimeFormatter; // Format date and time
 
 public class Order {
-	protected String orderID, orderTime;
+	protected String orderID;
+	protected LocalDateTime systemDT;
 	protected double orderPrice;
-	protected int orderIdCtr, orderQty;
-	
-	//add item to menu
+	protected int orderQty;
+	protected int orderCtr = 1;
+	protected boolean flag = true;
 	
 	public Order() {
 		
 	}
 	
-	public Order(String orderID, String orderTime, double orderPrice, int orderQty) {
+	public Order(String orderID, LocalDateTime systemDT, double orderPrice, int orderQty) {
 		this.orderID = orderID;
-		this.orderTime = orderTime;
+		this.systemDT = systemDT;
 		this.orderPrice = orderPrice;
 		this.orderQty = orderQty;
 	}
@@ -30,6 +28,15 @@ public class Order {
 	
 	public void createOrder() {
 		//While loop to add item into cart
+		orderID = ("ORD-" + String.format("%03d", orderCtr));
+		orderCtr++;
+		systemDT = LocalDateTime.now();
+//		Format System Date and Time
+	    DateTimeFormatter formatDT = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+	    String orderDT = systemDT.format(formatDT);
+		
+		System.out.println("Order Id: " + orderID);
+		System.out.println("Date/Time: " + orderDT);
 		
 	}
 }
