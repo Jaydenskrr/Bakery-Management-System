@@ -34,7 +34,12 @@ public class Report extends Item
 
 	}
 	
+	ArrayList<Report> sales = new ArrayList<Report>();
 	
+	public void statment()
+	{
+		sales.add(new Report(""));
+	}
 	
 }
 
