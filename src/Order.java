@@ -1,25 +1,25 @@
-import java.util.ArrayList; // import the ArrayList class
+import java.util.ArrayList;
 import java.util.Scanner;
-import java.time.LocalDateTime; // Import the LocalDateTime class, 
-import java.time.format.DateTimeFormatter; // Import the DateTimeFormatter class
-
-/* Before Formatting: 2025-04-04T16:08:20.597585
-After Formatting: 04-04-2025 16:08:20 */
+import java.time.LocalDateTime; // Get System date and time
+import java.time.format.DateTimeFormatter; // Format date and time
 
 public class Order {
-	protected String orderID, orderTime;
+	protected String orderID, custID;
+	protected LocalDateTime systemDT;
 	protected double orderPrice;
-	protected int orderIdCtr, orderQty;
+	protected int orderQty;
+	protected int orderCtr = 1;
+	protected boolean flag = true;
 	
-	//add item to menu
+	Scanner sc = new Scanner(System.in);
 	
 	public Order() {
 		
 	}
 	
-	public Order(String orderID, String orderTime, double orderPrice, int orderQty) {
+	public Order(String orderID, LocalDateTime systemDT, double orderPrice, int orderQty) {
 		this.orderID = orderID;
-		this.orderTime = orderTime;
+		this.systemDT = systemDT;
 		this.orderPrice = orderPrice;
 		this.orderQty = orderQty;
 	}
@@ -29,7 +29,37 @@ public class Order {
 	ArrayList<Order> orders = new ArrayList<Order>(); // Create an ArrayList object
 	
 	public void createOrder() {
+		
+		System.out.println("Bakery Member or Guest? (m/g)");
+		String custType = sc.nextLine();
+//		String custType = "m";
+		
+		if (custType.equals("m")) {
+			
+			System.out.println("LIST OF EXISTING MEMBERS");
+			Customer c = new Customer();
+			c.displayCustInfo();
+			
+		} else {
+			System.out.println("LIST OF EXISTING MEMBERS");
+		}
+		
+		
+		orderID = ("ORD-" + String.format("%03d", orderCtr));
+		
+		systemDT = LocalDateTime.now();
+		
+		//Format System Date and Time
+	    DateTimeFormatter formatDT = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+	    String orderDT = systemDT.format(formatDT);
+		
+		System.out.println("Order ID: " + orderID);
+		System.out.println("Date/Time: " + orderDT);
+		System.out.println("Customer Name: ");
+		
 		//While loop to add item into cart
 		
+		// ONLY IF ORDER IS SUCCESSFULLY CREATED
+		orderCtr++;
 	}
 }

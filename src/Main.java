@@ -8,7 +8,9 @@ public class Main {
 		
 		switch(selectedOpt) {
 			case "1":
-				System.out.println("Option 1 called");
+				System.out.println("Start Ordering");
+				Order o = new Order();
+				o.createOrder();
 				break;
 				
 			case "2":
