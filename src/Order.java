@@ -4,11 +4,12 @@ import java.time.LocalDateTime; // Get System date and time
 import java.time.format.DateTimeFormatter; // Format date and time
 
 public class Order {
-	protected String orderID, custID;
-	protected LocalDateTime systemDT;
+	private String orderID;
+	private String custID;
+	private LocalDateTime systemDT;
 //	protected double orderPrice;
 //	protected int orderQty;
-	protected int orderCtr = 1;
+	private static int ORDERCOUNTER = 1;
 	
 	//Cart
 	protected String itemCode;
@@ -61,7 +62,7 @@ public class Order {
 		}
 		
 		
-		orderID = ("ORD-" + String.format("%03d", orderCtr));
+		orderID = ("ORD-" + String.format("%03d", ORDERCOUNTER));
 		systemDT = LocalDateTime.now();
 		
 		//Format System Date and Time
@@ -75,18 +76,17 @@ public class Order {
 		
 		//While loop to add item into cart
 		
-		
-		orderCtr++;
+		ORDERCOUNTER++;
 		
 		// IF GUEST, set POINTS = 0
 	}
 	
 		//Create method for temp orders (cart)
-	public  String addToCart(String itemCode, int quantity) {
-        cart.add(new Cart(itemCode, quantity));  // Create CartItem objects
-    }
+//	public  String addToCart(String itemCode, int quantity) {
+//        
+//    }
 	
-	public String checkOut() {
+	public void checkOut() {
 		System.out.println("ORDER SUMMARY"); 
 		System.out.println("[Show item in cart]"); 
 		
@@ -97,11 +97,30 @@ public class Order {
 		System.out.println("Choose payment method: ");
 		
 		String paymentChoice = sc.nextLine();
+		String paymentMethod = "";
 		
 		switch(paymentChoice) {
-			case "1", "Cash":
-				System.out.println("Cash Chosen");
+			case "1":
+				paymentMethod = "Cash";
+				System.out.println("Enter amount of Cash: RM");
+				double amount = Double.parseDouble(sc.nextLine());
+//				double change = totalAmount - amount;
+				break;
+				
+			case "2":
+				paymentMethod = "Credit Card";
+				break;
+				
+			case "3":
+				paymentMethod = "E-wallet (DuitNow)";
+				break;
 		}
 		
+		System.out.println("Payment via:" + paymentMethod);
+		System.out.println("Order Completed. Thank you!");
+		
+		//Save order to history in the arraylist
+		orders.add(this); 
+				
 	}
 }
