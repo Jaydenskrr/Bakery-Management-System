@@ -1,31 +1,28 @@
 import java.util.*;
 
-public class Report extends Item{
+public class Report {
+	String itemName;
+	String itemId;
+	String itemType;
+	int itemQty;
+	int sold;
+	double itemPrice;
+	double total;
 	
-	public Report(String id, String name, int qty, String type){
-		super(id, name, qty, type);
+	
+	public Report(String itemId, String itemName, String itemType, int itemQty, int sold, double itemPrice, double total) {
 		
 	}
-
-	ArrayList<Item> view = new ArrayList<Item>();
 	
-	public void sales(){
-		view.add(new Report("A01", "Bread", 10, "bun"));
+	ArrayList<Report> obj = new ArrayList<>();
+	
+	public void salesReport() {
+		obj.add(new Report("B001", "Baguette", "Bread", 10, 2, 9.90, 19.80));
 	}
 	
 	
-	public void displayReport() {
-		sales();
-		for (int i = 0; i < view.size(); i++) {
-			System.out.println((view.get(i)).toString());
-		}
-	}
-	
-	public static void main(String[] args){
-		Report r = new Report(null, null, 0, null);
+	public static void main(String[] args) {
 		
-		r.displayReport();
 	}
-	
 	
 }
