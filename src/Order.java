@@ -12,6 +12,7 @@ public class Order {
 	
 	//Cart
 	protected String itemCode;
+	protected int quantity;
 	
 	Scanner sc = new Scanner(System.in);
 	
@@ -72,12 +73,6 @@ public class Order {
 		
 		//Print menu here
 		
-		//Create method for temp orders (cart)
-		public void addToCart(String itemCode, int quantity) {
-	        cart.add(new Cart(itemCode, quantity));  // Create CartItem objects
-	    }
-		
-		
 		//While loop to add item into cart
 		
 		
@@ -85,4 +80,9 @@ public class Order {
 		
 		// IF GUEST, set POINTS = 0
 	}
+	
+		//Create method for temp orders (cart)
+		public  String addToCart(String itemCode, int quantity) {
+	        cart.add(new Cart(itemCode, quantity));  // Create CartItem objects
+	    }
 }
