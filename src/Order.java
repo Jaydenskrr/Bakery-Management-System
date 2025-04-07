@@ -10,21 +10,10 @@ public class Order {
 //	protected int orderQty;
 	protected int orderCtr = 1;
 	
-	Scanner sc = new Scanner(System.in);
+	//Cart
+	protected String itemCode;
 	
-	private class Cart {
-		String itemID;
-		int orderQty;
-		
-		public Cart() {
-			
-		}
-		
-		public Cart(String itemID, int orderQty) {
-			this.itemID = itemID;
-	        this.orderQty = orderQty;
-		}
-	}
+	Scanner sc = new Scanner(System.in);
 	
 	public Order() {
 		
@@ -84,10 +73,10 @@ public class Order {
 		//Print menu here
 		
 		//Create method for temp orders (cart)
-//		public void addToCart(String itemCode, int quantity) {
-//	        cart.add(new Cart(itemCode, quantity));  // Create CartItem objects
-//	    }
-//		
+		public void addToCart(String itemCode, int quantity) {
+	        cart.add(new Cart(itemCode, quantity));  // Create CartItem objects
+	    }
+		
 		
 		//While loop to add item into cart
 		
