@@ -10,6 +10,7 @@ public class Main {
 			case "1":
 				System.out.println("Start Ordering");
 				Order o = new Order();
+//				o.addToCart()
 				o.createOrder();
 				break;
 				

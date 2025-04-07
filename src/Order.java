@@ -41,9 +41,9 @@ public class Order {
 		
 		if (custType.equals("m")) { // if customer is member
 			
+			System.out.println("LIST OF EXISTING MEMBERS");
 			Customer c = new Customer();
 			c.displayCustInfo();
-			System.out.println("LIST OF EXISTING MEMBERS");
 			System.out.println("Enter Customer ID: ");
 			cID = sc.nextLine();
 			Customer foundCust = c.findCustByID(cID);
@@ -82,7 +82,26 @@ public class Order {
 	}
 	
 		//Create method for temp orders (cart)
-		public  String addToCart(String itemCode, int quantity) {
-	        cart.add(new Cart(itemCode, quantity));  // Create CartItem objects
-	    }
+	public  String addToCart(String itemCode, int quantity) {
+        cart.add(new Cart(itemCode, quantity));  // Create CartItem objects
+    }
+	
+	public String checkOut() {
+		System.out.println("ORDER SUMMARY"); 
+		System.out.println("[Show item in cart]"); 
+		
+		System.out.println("\nPAYMENT METHOD");
+		System.out.println("1. Cash");
+		System.out.println("2. Credit Card");
+		System.out.println("3. E-wallet (DuitNow)");
+		System.out.println("Choose payment method: ");
+		
+		String paymentChoice = sc.nextLine();
+		
+		switch(paymentChoice) {
+			case "1", "Cash":
+				System.out.println("Cash Chosen");
+		}
+		
+	}
 }
