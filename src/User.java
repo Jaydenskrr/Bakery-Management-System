@@ -1,7 +1,7 @@
+import java.net.SocketPermission;
 import java.util.*;
 
 public class User {
-<<<<<<< HEAD
 
     // Static list to hold all users in memory
     private static final ArrayList<User> allUsers = new ArrayList<>();
@@ -29,15 +29,33 @@ public class User {
 
     public User() {
     }
-    
 
-    public void setUtype(String uType) {
+    // Admin registration
+    public void adminLogin() {
+        System.out.println("Please enter your username: ");
+        AdminUserName = sc.nextLine();
+        System.out.println("Please enter your password: ");
+        AdminPassword = sc.nextLine();
+        if(AdminUserName.equals("Admin") && AdminPassword.equals("123")) {
+            System.out.println("Welcome Admin!");
+            adminMenu();
+        } else {
+            System.out.println("Invalid username or password. Please try again.");
+            adminLogin();
+        }
+    } 
+
+
+
+    //sop = admin or cusotomer switch case admin (call admin class)
+    public void customerRegistration(String uType) {
         System.out.println("Enter your user type: ");
         System.out.println("1. Walk-In");
         System.out.println("2. Online");
         System.out.println("0. Exit");
         int choice = sc.nextInt();
-        switch(choice){
+        do { 
+            switch(choice){
             case 1:
                 uType = "Walk_In";
                 System.out.println("Please enter your details: ");
@@ -53,11 +71,12 @@ public class User {
                 setName();
                 setPhone();
                 break;
-            case 3:
-                uType = "Admin";
-
-   
-    }
+            case 0: System.out.println("Exiting...");
+                break;  
+            default:
+                System.out.println("Invalid choice. Exiting...");
+            }     
+        } while (choice!= 0);
     }
 
     public void setUid() {
@@ -165,18 +184,5 @@ public class User {
 
 
 
-=======
-	
-	//variables
-	
-	//
-	
-	//Customer method
-	/* Notes
-	 * 1. Sysout the options
-	 * 1.1 Login
-	 * 
-	 * */
->>>>>>> refs/remotes/origin/main
 }
 
