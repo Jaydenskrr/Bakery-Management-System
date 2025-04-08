@@ -1,4 +1,3 @@
-import java.net.SocketPermission;
 import java.util.*;
 
 public class User {
@@ -7,16 +6,17 @@ public class User {
     private static final ArrayList<User> allUsers = new ArrayList<>();
 
     // Admin credentials
-    private final String AdminUserName = "Admin";
-    private final String AdminPassword = "123";
+    private final String adminUserName = "Admin";
+    private final String adminPassword = "123";
     private String uId;
-    private String uType; // "Walk_In", "Online", "Admin"
+    private String uType; // "Walk_In", "Online"
     private String uPassword;
     private String uName;
     private String uPhone;
 
 
     Scanner sc = new Scanner(System.in);
+    Scanner sc1 = new Scanner (System.in);
     
     // Constructor for only Customer
     public User(String uId, String uType, String uPassword, String uName, String uPhone) {
@@ -30,36 +30,46 @@ public class User {
     public User() {
     }
 
-    // Admin registration
+
     public void adminLogin() {
+        int atm = 3;
+        boolean loggedIn = false;
+
+        while (!loggedIn && atm > 0) {
+        System.out.println("\n=== Admin Login ===");
         System.out.println("Please enter your username: ");
-        AdminUserName = sc.nextLine();
+        String inName = sc1.nextLine();
         System.out.println("Please enter your password: ");
-        AdminPassword = sc.nextLine();
-        if(AdminUserName.equals("Admin") && AdminPassword.equals("123")) {
-            System.out.println("Welcome Admin!");
-            adminMenu();
-        } else {
-            System.out.println("Invalid username or password. Please try again.");
-            adminLogin();
+        String inPass = sc1.nextLine();
+        
+        if (inName.equals(adminUserName) && inPass.equals(adminPassword)){
+            System.out.println("Welcome" + adminUserName + "!");
+            loggedIn = true;
+            // adminMenu();
+         } else {
+            atm--;
+            System.out.println("Invalid username or password. Please try again. You have " + atm + " attempts left.");  
+         }
         }
-    } 
+        if (!loggedIn) {
+            System.out.println("You have exceeded the maximum number of attempts. Exiting...");
+        }
+    }
 
-
-
-    //sop = admin or cusotomer switch case admin (call admin class)
-    public void customerRegistration(String uType) {
+    // sop = admin or cusotomer switch case admin (call admin class)
+    public void customerRegistration() {
+        System.out.println("\n=== Customer Registration ===");
         System.out.println("Enter your user type: ");
         System.out.println("1. Walk-In");
         System.out.println("2. Online");
         System.out.println("0. Exit");
         int choice = sc.nextInt();
-        do { 
             switch(choice){
             case 1:
                 uType = "Walk_In";
                 System.out.println("Please enter your details: ");
                 setUid();
+                sc.nextLine(); // Consume newline
                 setName();
                 setPhone();
                 break;
@@ -67,28 +77,75 @@ public class User {
                 uType = "Online";
                 System.out.println("Please enter your details: ");
                 setUid();
+                sc.nextLine(); // Consume newline
                 setPassword();
                 setName();
                 setPhone();
                 break;
-            case 0: System.out.println("Exiting...");
-                break;  
+            case 0: System.out.println("Registration cancelled. Exiting...");
+             break;  
             default:
                 System.out.println("Invalid choice. Exiting...");
             }     
-        } while (choice!= 0);
+      
+
+
+        allUsers.add(new User(uId, uType, uPassword, uName, uPhone));
+        System.out.println("Registration successful!");
     }
+
+    // public void customerRegistration() {  // Removed uType parameter
+    //     System.out.println("\n=== Customer Registration ===");
+    //     System.out.println("1. Walk-In");
+    //     System.out.println("2. Online");
+    //     System.out.println("0. Exit");
+    //     System.out.print("Choose type: ");
+    //     int choice = sc.nextInt();
+    //     sc.nextLine(); // Consume newline
+        
+    //     if (choice == 0) {
+    //         System.out.println("Registration cancelled.");
+    //         return;
+    //     }
+        
+    //     // Common fields
+    //     setUid();
+    //     setName();
+    //     setPhone();
+        
+    //     // Type-specific fields
+    //     if (choice == 1) {
+    //         uType = "Walk_In";
+    //         uPassword = ""; // No password for walk-in
+    //     } else if (choice == 2) {
+    //         uType = "Online";
+    //         setPassword();
+    //     } else {
+    //         System.out.println("Invalid choice!");
+    //         return;
+    //     }
+        
+    //     // Create and store the new user
+    //     allUsers.add(new User(uId, uType, uPassword, uName, uPhone));
+    //     System.out.println("Registration successful!");
+    // }
+
+    // public void adminMenu() {
+
+    // }
+
+
 
     public void setUid() {
         System.out.print("Enter your ID: ");
         uId = sc.nextLine();
-     }
+    }
 
     public void setPassword(){
         System.out.println("Enter your password: ");
         uPassword = sc.nextLine();
 
-     }
+    }
 
     public void setName(){
     System.out.println("Enter your name: ");
@@ -99,8 +156,6 @@ public class User {
         System.out.println("Enter your phone number: ");
         uPhone = sc.nextLine();
     }
-        
-    
 
     public void storeData() {
         for(User user : allUsers){
@@ -125,64 +180,13 @@ public class User {
         return uPhone;
     }
 
-    // To check the User type
-    public boolean isWalkIn(){
-        return "Walk_In".equalsIgnoreCase(uType);
-    }
-
-    public boolean isOnline(){
-        return "Online".equalsIgnoreCase(uType);
-    }
-
-    // Authentication methods
-    // Admin login (username + password)
-    
-    // Online customer login (phone + password)
-    
-    
-    public boolean authenticationOnline(String phone, String password) {
-        return this.isOnline() && this.getUPhone().equals(phone) && this.getUPassword().equals(password);
-
-        }
-
-    public boolean authenticationWalkIn(String phone) {
-        return this.isWalkIn() && this.uPhone.equals(phone);
-    }
-
-    public boolean authenticationAdmin(String username, String password) {
-        return this
-
-    public static User loginOnline(String phone, String password){
-        for(User user : allUsers){
-            if(user.authenticationOnline(phone, password)){
-                return user;
-            }
-        }
-        return null;
-    }
-
-    public static User loginWalkIn(String phone){
-        for(User user : allUsers){
-            if(user.authenticationWalkIn(phone)){
-                return user;
-            }
-        }
-        return null;
-    }
-
-
     static {
-        new User("C001", "Walk_In", "1234", "Customer1", "1234567890");
-        new User("C002", "Walk_In", "1234", "Customer2", "9876543210");
-        new User("C003", "Online", "1234", "Customer3", "1234567890");
-        new User("C004", "Online", "1234", "Customer4", "9876543210");
+        new User("C001", "Walk_In", "", "Customer1", "1234567890");
+        new User("C002", "Walk_In", "", "Customer2", "9876543210");
+        new User("C003", "Online", "1234", "Customer3", "5551112222");
+        new User("C004", "Online", "1234", "Customer4", "5553334444");
     }
-
-
-
-
-
-
 
 }
+
 
