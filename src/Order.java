@@ -5,7 +5,7 @@ import java.time.format.DateTimeFormatter; // Format date and time
 
 public class Order {
 	private String orderID;
-	private String custID;
+	private String cID;
 	private LocalDateTime systemDT;
 //	protected double orderPrice;
 //	protected int orderQty;
@@ -74,8 +74,6 @@ public class Order {
 		
 		//Print menu here
 		
-		//While loop to add item into cart
-		
 		ORDERCOUNTER++;
 		
 		// IF GUEST, set POINTS = 0
@@ -120,7 +118,7 @@ public class Order {
 		System.out.println("Order Completed. Thank you!");
 		
 		//Save order to history in the arraylist
-		orders.add(this); 
+//		orders.add(this); 
 				
 	}
 }
