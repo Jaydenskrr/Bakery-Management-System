@@ -8,13 +8,14 @@ public class Item {
 	private String itemId, itemName;
 	private int sold;
 	private double unitPrice, totalSales;
-
+	
 	
 	//path to csv file
 	String path = "src/Inventory.csv";
 	
 	//instantiating BufferedReader
-	BufferedReader br = null;
+	BufferedReader rr = null;
+	BufferedReader mr = null;
 	
 	//to store each line read
 	String line = " ";
@@ -23,12 +24,12 @@ public class Item {
 	ArrayList<ArrayList<String>> data = new ArrayList<>();
 	
 	
-	//display method for the data
-	public void display() throws IOException {
+	//display method for report
+	public void report() throws IOException {
 		try {
-			//calling BufferedReader br to read from CSV file
-			br = new BufferedReader(new FileReader(path));
-			while((line = br.readLine()) != null) {
+			//calling BufferedReader rr to read from CSV file
+			rr = new BufferedReader(new FileReader(path));
+			while((line = rr.readLine()) != null) {
 				
 				//removing "," from CSV to blank spaces
 				String[] value = line.split(",");
@@ -47,12 +48,44 @@ public class Item {
 		} catch(Exception e) {
 			e.printStackTrace();
 		} finally {
-			br.close();
+			rr.close();
 		}
 	}
+	
+	// display method for menu 
+	public void menu() throws IOException{
+		try {
+			
+			mr = new BufferedReader(new FileReader(path));
+			
+			String headerLine = mr.readLine();
+			
+			if (headerLine == null) return;
+			
+			
+			
+			while((line = mr.readLine()) != null) {
+				String [] fields = line.split(",");
+				
+				if (fields.length >= 4) {
+					String itemId = fields[0];
+					String itemName = fields[1];
+					String unitPrice = fields[2];
+					
+					System.out.println("ID: " +itemId + ", Name: " +itemName + ", Unit Price: " +unitPrice);
+				}
+				
+			}
+				
+		}catch(Exception e) {
+			
+		}	
+	}
+	
 	public static void main(String[] args) throws IOException {
 		Item item = new Item();
-		item.display();
+		item.report();
+		item.menu();
 		}
 }
 
