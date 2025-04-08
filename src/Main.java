@@ -30,16 +30,20 @@ public class Main {
 		switch(selectedOpt) {
 			case "1":
 				System.out.println("Log in");
-				
+				//call method from User class
+				//
 				
 				break;
 				
 			case "2":
 				System.out.println("Start Order");
+				//call method from User class
+				
 				break;
 				
 			case "3":
 				System.out.println("Admin");
+				//call method from User class
 				
 		}
 		

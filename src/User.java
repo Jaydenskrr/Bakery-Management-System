@@ -1,6 +1,7 @@
 import java.util.*;
 
 public class User {
+<<<<<<< HEAD
 
     // Static list to hold all users in memory
     private static final ArrayList<User> allUsers = new ArrayList<>();
@@ -164,5 +165,18 @@ public class User {
 
 
 
+=======
+	
+	//variables
+	
+	//
+	
+	//Customer method
+	/* Notes
+	 * 1. Sysout the options
+	 * 1.1 Login
+	 * 
+	 * */
+>>>>>>> refs/remotes/origin/main
 }
 
