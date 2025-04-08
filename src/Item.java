@@ -11,7 +11,7 @@ public class Item {
 
 	
 	//path to csv file
-	String path = "/Users/waichoong/Bakery-Management-System/src/Inventory.csv";
+	String path = "src/Inventory.csv";
 	
 	//instantiating BufferedReader
 	BufferedReader br = null;
