@@ -5,9 +5,11 @@ import java.util.*; // ArrayList, Array, List
 
 public class Item {
 	
-	private String itemId, itemName;
-	private int sold;
-	private double unitPrice, totalSales;
+//	private String itemId, itemName;
+//	private int sold;
+//	private double unitPrice, totalSales;
+	
+	
 	
 	
 	//path to csv file
@@ -31,12 +33,14 @@ public class Item {
 			rr = new BufferedReader(new FileReader(path));
 			while((line = rr.readLine()) != null) {
 				
-				//removing "," from CSV to blank spaces
+				//storing temporary lines into an array value
+				//removing "," and replace with " "
 				String[] value = line.split(",");
 				
-				//to read the rows as list
+				//creating a new ArrayList with values from array value
 				ArrayList<String> row = new ArrayList<>(Arrays.asList(value));
 				
+				//adding data into the ArrayList
 				data.add(row);
 				
 				}
@@ -65,8 +69,10 @@ public class Item {
 			
 			
 			while((line = mr.readLine()) != null) {
+				
 				String [] fields = line.split(",");
 				
+				//fields.length determines the number of desired fields/variables to be printed
 				if (fields.length >= 4) {
 					String itemId = fields[0];
 					String itemName = fields[1];
@@ -82,6 +88,10 @@ public class Item {
 		}	
 	}
 	
+	
+	public void newItem() {
+		
+	}
 	public static void main(String[] args) throws IOException {
 		Item item = new Item();
 		item.report();
