@@ -18,6 +18,8 @@ public class Item {
 	//instantiating BufferedReader
 	BufferedReader rr = null;
 	BufferedReader mr = null;
+	BufferedWriter nr = null;
+
 	
 	//to store each line read
 	String line = " ";
@@ -89,13 +91,51 @@ public class Item {
 	}
 	
 	
-	public void newItem() {
+	public void newItem(String data) throws IOException {
+		try {
+			nr = new BufferedWriter(new FileWriter(path,true));
+			nr.write(data);
+			nr.newLine();
+			
+		} catch(Exception e) {
+			
+		} finally {
+			nr.close();
+		}
 		
 	}
+	
 	public static void main(String[] args) throws IOException {
 		Item item = new Item();
-		item.report();
-		item.menu();
+//		item.report();
+//		item.menu();
+		
+		String option = "";
+		
+		do {
+			Scanner sc = new Scanner(System.in);
+			System.out.println("1. View Menu");
+			System.out.println("2. View Report");
+			System.out.println("3. Add Items");
+			System.out.println("0. Exit");
+			option = sc.next();
+			
+			switch(option) {
+				case "1" :
+					item.menu();
+					break;
+				case "2" :
+					item.report();
+					break;
+				case "3":
+					item.newItem(option);
+					break;
+				default: System.out.println("Exited");
+			}
+			
+		} while(!option.equals("0"));
+		
+		
 		}
 }
 
