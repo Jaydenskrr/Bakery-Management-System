@@ -1,25 +1,44 @@
 //import java.util.*;
 import java.io.*;
-//import java.time.LocalDateTime; // Get System date and time
-//import java.time.format.DateTimeFormatter; // Format date and time
+import java.time.LocalDateTime; // Get System date and time
+import java.time.format.DateTimeFormatter; // Format date and time
 
 public class Order {
 	
 	private static int latestOrderId = 0;
 	private String orderId;
-//    private String custPhone;
+    private String custPhone;
 //    private LocalDateTime time;
 //    private double total;
-//    private String type; // Online or WalkIn
+    private String type; // Online or WalkIn
     
 	//path to csv file
 	private static final String path = "src/order.csv";
+	
+	
 	
 	//Instantiate Buffered REader
 	static {
 	    loadLastOrderNumber();
 	}
     
+	public Order() {
+	
+	}
+	
+	public Order(String custPhone, String type) {
+		orderId = generateOrderId();
+	    this.custPhone = custPhone;
+	    
+	    this.type = type;
+	    
+//	    time = LocalDateTime.now();
+//	    productIds = new ArrayList<>();
+//	    quantities = new ArrayList<>();
+//	    total = 0.0;
+	}
+	
+	
 	// Generates sequential order IDs (ORD-001, ORD-002...)
     public String generateOrderId() {
         latestOrderId++;
@@ -55,22 +74,25 @@ public class Order {
     }
     
     public static void main(String[] args) {
-        Order order = new Order();
+        Order order = new Order("+60123456789", "online");
         System.out.println("First ID: " + order.generateOrderId());
         System.out.println("Second ID: " + order.generateOrderId());
+
+        order.saveOrderToCSV(cart);
+    }
+    
+ // In your Order.java
+    public void saveOrderToCSV(Cart cart) throws IOException {
+        try (FileWriter writer = new FileWriter("orders.csv", true)) {
+            writer.write(String.join(",",
+                this.orderId,
+                this.custPhone,
+                LocalDateTime.now().toString(),
+                String.format("%.2f", cart.getTotal()),
+                this.type
+            ) + "\n");
+        }
     }
 
-//    public Order() {
-//    	
-//    }
-//    
-//    public Order(String custPhone, String type) {
-//    	orderId = generateOrderId();
-//        this.custPhone = custPhone;
-//        time = LocalDateTime.now();
-//        this.type = type;
-//        productIds = new ArrayList<>();
-//        quantities = new ArrayList<>();
-//        total = 0.0;
-//    }
+
 }
