@@ -10,20 +10,13 @@ public class Item {
 	private int sold, stock;
 	private double unitPrice, totalSales;
 	
-	
-	
-	
 	//path to csv file
 	String path = "src/Inventory.csv";
 	
 	//instantiating BufferedReader and Scanner 
 	BufferedReader rr = null;
-	BufferedReader mr = null;
-	BufferedReader dr = null;
-	BufferedWriter ur = null;
-	BufferedWriter nr = null;
+	BufferedWriter uw = null;
 	Scanner input = new Scanner(System.in);
-	Scanner read = new Scanner(System.in);
 
 	
 	//to store each line read
@@ -32,6 +25,8 @@ public class Item {
 	//ArrayList to store the data
 	ArrayList<ArrayList<String>> data = new ArrayList<>();
 	
+	ArrayList<String> copy = new ArrayList<>();
+	ArrayList<String> update = new ArrayList<>();
 	
 	//display method for report
 	public void report() throws IOException {
@@ -67,15 +62,15 @@ public class Item {
 	public void menu() throws IOException{
 		try {
 			
-			mr = new BufferedReader(new FileReader(path));
+			rr = new BufferedReader(new FileReader(path));
 			
-			String headerLine = mr.readLine();
+			String headerLine = rr.readLine();
 			
 			if (headerLine == null) return;
 			
 			
 			
-			while((line = mr.readLine()) != null) {
+			while((line = rr.readLine()) != null) {
 				
 				String [] fields = line.split(",");
 				
@@ -111,40 +106,41 @@ public class Item {
 		String newData = String.format("%s,%s,%d,%.2f,%.2f", itemId, itemName, sold, unitPrice, totalSales);
 		
 		try {
-			nr = new BufferedWriter(new FileWriter(path,true));
-			nr.write(newData);
-			nr.newLine();
+			uw = new BufferedWriter(new FileWriter(path,true));
+			uw.write(newData);
+			uw.newLine();
 			
 			
 		} catch(Exception e) {
 			
 		} finally {
-			nr.close();
-			input.close();
+			uw.close();
 		}
 		
 	}
+	
+	boolean itemFound = false;
 	
 	public void removeItem() throws IOException {
 		String delete = "";
 		
 		System.out.println("Enter item ID you would like to delete: ");
-		delete = read.nextLine();
+		delete = input.nextLine();
 		
-		ArrayList<String> copy = new ArrayList<>();
-		boolean itemFound = false;
+//		ArrayList<String> copy = new ArrayList<>();
+//		boolean itemFound = false;
 		
 		try {
-			dr = new BufferedReader(new FileReader(path));
+			rr = new BufferedReader(new FileReader(path));
 			
 			String line = "";
 			
-			String header = dr.readLine();
+			String header = rr.readLine();
 			if(header != null) {
 				copy.add(header);
 			}
 			
-			while((line = dr.readLine()) != null) {
+			while((line = rr.readLine()) != null) {
 				String[] fields = line.split(",");
 			
 			
@@ -157,7 +153,7 @@ public class Item {
 		} catch(Exception e) {
 			
 		} finally {
-			dr.close();
+			rr.close();
 		}
 		
 		if(!itemFound) {
@@ -165,24 +161,150 @@ public class Item {
 		}
 		
 		try {
-			ur = new BufferedWriter(new FileWriter(path));
+			uw = new BufferedWriter(new FileWriter(path));
 			
 			for(String row : copy) {
-				ur.write(row);
-				ur.newLine();
+				uw.write(row);
+				uw.newLine();
 			}
 			
 		} catch (Exception e) {
 			
 		} finally {
-			ur.close();
+			uw.close();
 		}
+	}
+	
+	public void restock() throws IOException {
+		final int ID_COLUMN = 0;   
+		final int STOCK_COLUMN = 2; 
+		
+		String append = "";
+		int newQty;
+	
+		System.out.println("Enter the item ID you would like to append: ");
+		append = input.nextLine();
+		System.out.println("Enter quantity to be added: ");
+		newQty = Integer.parseInt(input.nextLine());
+		
+		
+		try {
+			rr = new BufferedReader(new FileReader(path));
+			String line = "";
+			Boolean found = false;
+			
+			String header = rr.readLine();
+			if(header != null) {
+				update.add(header);
+			}
+			
+			while((line = rr.readLine()) != null) {
+				String[] fields = line.split(",");
+				
+				if(fields.length >= 3 && fields[0].equals(append)) {
+	                int stock = Integer.parseInt(fields[STOCK_COLUMN]);
+					fields[STOCK_COLUMN] = String.valueOf(stock += newQty);
+					found = true;
+				
+				} 
+			
+				update.add(String.join(",", fields));
+			}
+			
+			if(!found) {
+				System.out.println("Item ID was not found: " +append);
+			}
+			
+		} catch (Exception e) {
+			
+		} finally {
+			input.close();
+		}
+		
+		try {
+			uw = new BufferedWriter(new FileWriter(path));
+			
+			for (String update: update) {
+				uw.write(update);
+				uw.newLine();
+			}
+			
+		} catch(Exception e) {
+			
+		} finally {
+			uw.close();
+		}
+		
+	}
+	
+	public void editPrice() throws IOException {
+		final int ID_COLUMN = 0;   
+		final int PRICE_COLUMN = 4; 
+		
+		String append = "";
+		double newPrice;
+	
+		System.out.println("Enter the item ID you would like to append: ");
+		append = input.nextLine();
+		System.out.println("Enter the new price: ");
+		newPrice = Double.parseDouble(input.nextLine());
+		
+		
+		try {
+			rr = new BufferedReader(new FileReader(path));
+			String line = "";
+			Boolean found = false;
+			
+			String header = rr.readLine();
+			if(header != null) {
+				update.add(header);
+			}
+			
+			while((line = rr.readLine()) != null) {
+				String[] fields = line.split(",");
+				
+				if(fields.length >= 3 && fields[0].equals(append)) {
+	                double price = Double.parseDouble(fields[PRICE_COLUMN]);
+					fields[PRICE_COLUMN] = String.valueOf(newPrice);
+					found = true;
+				
+				} 
+			
+				update.add(String.join(",", fields));
+			}
+			
+			if(!found) {
+				System.out.println("Item ID was not found: " +append);
+			}
+			
+		} catch (Exception e) {
+			
+		} finally {
+			input.close();
+		}
+		
+		try {
+			uw = new BufferedWriter(new FileWriter(path));
+			
+			for (String update: update) {
+				uw.write(update);
+				uw.newLine();
+			}
+			
+		} catch(Exception e) {
+			
+		} finally {
+			uw.close();
+		}
+		
 	}
 	
 	public static void main(String[] args) throws IOException {
 		Item open = new Item();
 //		open.addItem();
-		open.removeItem();
+//		open.removeItem();
+		open.editPrice();
+		
 	}
 }
 
