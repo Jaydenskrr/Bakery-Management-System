@@ -16,17 +16,18 @@ public class Item {
 	//path to csv file
 	String path = "src/Inventory.csv";
 	
-	//instantiating BufferedReader
+	//instantiating BufferedReader and Scanner 
 	BufferedReader rr = null;
 	BufferedReader mr = null;
 	BufferedReader dr = null;
 	BufferedWriter ur = null;
 	BufferedWriter nr = null;
 	Scanner input = new Scanner(System.in);
+	Scanner read = new Scanner(System.in);
 
 	
 	//to store each line read
-	String line = " ";
+	String line = "";
 	
 	//ArrayList to store the data
 	ArrayList<ArrayList<String>> data = new ArrayList<>();
@@ -119,11 +120,16 @@ public class Item {
 			
 		} finally {
 			nr.close();
+			input.close();
 		}
 		
 	}
 	
-	public void removeItem(String delete) throws IOException {
+	public void removeItem() throws IOException {
+		String delete = "";
+		
+		System.out.println("Enter item ID you would like to delete: ");
+		read.nextLine();
 		
 		ArrayList<String> copy = new ArrayList<>();
 		boolean itemFound = false;
@@ -131,7 +137,7 @@ public class Item {
 		try {
 			dr = new BufferedReader(new FileReader(path));
 			
-			String line = " ";
+			String line = "";
 			
 			String header = dr.readLine();
 			if(header != null) {
@@ -171,10 +177,12 @@ public class Item {
 		} finally {
 			ur.close();
 		}
+	}
 	
 	public static void main(String[] args) throws IOException {
 		Item open = new Item();
-		
+//		open.addItem();
+		open.removeItem();
 	}
 }
 
