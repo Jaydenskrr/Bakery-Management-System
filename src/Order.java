@@ -15,7 +15,6 @@ public class Order {
 	//paths to csv file
 	private static final String path_order = "src/orders.csv";
     private static final String path_orderItem = "src/order_items.csv";
-    private static final String path_Inventory = "src/Inventory.csv";
     
     public enum OrderStatus {
         PAYMENT_PENDING("Payment Pending"),
@@ -114,8 +113,8 @@ public class Order {
         }
     }
     
-    public void saveOrderToCSV(Cart cart) throws IOException {
-    	try (FileWriter writer = new FileWriter(path_order, true)) {
+    public void saveOrderToCSV(double totalAmount) throws IOException {
+        try (FileWriter writer = new FileWriter(path_order, true)) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
             String formattedDate = orderDate.format(formatter);
             
@@ -123,7 +122,7 @@ public class Order {
                 orderId,
                 custPhone,
                 formattedDate,
-                String.format("%.2f", cart.getTotal()),
+                String.format("%.2f", totalAmount), // Use the passed totalAmount
                 type,
                 status.toString()
             ) + "\n");
@@ -139,28 +138,6 @@ public class Order {
             }
         } catch (IOException e) {
             System.err.println("Error reading file: " + filePath);
-        }
-    }
-    
-    public static void displayMenu() throws IOException {
-        System.out.println("\n=== Today's Menu ===");
-        try (BufferedReader reader = new BufferedReader(new FileReader(path_Inventory))) {
-            // Skip header
-            reader.readLine();
-            
-            System.out.printf("%-8s %-20s %-10s %-8s\n", 
-                "ID", "Item Name", "Price", "Stock");
-            System.out.println("----------------------------------------");
-            
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length >= 5) {
-                    System.out.printf("%-8s %-20s RM%-9.2f %-8s\n",
-                        parts[0], parts[1], 
-                        Double.parseDouble(parts[4]), parts[2]);
-                }
-            }
         }
     }
 
@@ -220,19 +197,16 @@ public class Order {
         }
 
         try (BufferedReader reader = new BufferedReader(new FileReader(itemsFile))) {
-            // Skip header if exists
+            // Skip header
             reader.readLine();
             
-            String line = reader.readLine();
             boolean foundItems = false;
-            
-            while (line != null) {
-                if (line.trim().isEmpty()) {
-                	continue;
-                }
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.trim().isEmpty()) continue;
                 
                 String[] columns = line.split(",");
-                if (columns[0].equals(orderId)) {
+                if (columns.length >= 5 && columns[0].equals(orderId)) {
                     System.out.printf("- %s x%s @ RM%s each (Total: RM%s)%n",
                         columns[1], columns[2], columns[3], columns[4]);
                     foundItems = true;
@@ -242,6 +216,45 @@ public class Order {
             if (!foundItems) {
                 System.out.println("(No items found for this order)");
             }
+        }
+    }
+    
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Item item = new Item();
+        
+        try {
+            System.out.println("=== Bakery System Test ===");
+            
+            // 1. Display menu
+            System.out.println("\n--- Current Menu ---");
+            item.menu();
+            
+            // 2. Create test orders for same customer
+            String testPhone = "0123456789";
+            
+            // First order
+            Order order1 = new Order(testPhone, "online");
+            Cart cart1 = new Cart();
+            cart1.addItem("B001", 1); // Baguette
+            cart1.addItem("C002", 3); // Tiramisu
+            order1.completeOrder();
+            cart1.checkout(order1);
+            
+            // Verify order items were saved
+            System.out.println("\n--- Order Items for ORD-" + (latestOrderId) + " ---");
+            Order.displayOrderItems("ORD-" + String.format("%03d", latestOrderId));
+            
+            // 3. Display all order history
+            System.out.println("\n=== Complete Order History ===");
+            Order.displayCustomerHistory(testPhone);
+            
+        } catch (Exception e) {
+            System.err.println("Test failed: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            scanner.close();
+            System.out.println("\n=== Test Completed ===");
         }
     }
 }

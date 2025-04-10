@@ -1,4 +1,5 @@
 ItemID,ItemName,Stock,Sold,UnitPrice,TotalSales
+<<<<<<< HEAD
 B001,Baguette,9,31,18.9,585.90
 B002,Garlic Bread,18,2,2.80,5.60
 B003,Mexico Bun,15,5,3.80,19.00
@@ -8,3 +9,13 @@ C003,Rum Raisin,20,0,24.80,0
 K001,Ginger Bread Cookies,20,0,6.80,0
 K002,Choco Chip Cookies,3,17,8.80,149.60
 K003,WaiChoong bread,0,100.00,0.00
+=======
+B001,Baguette,93,40,18.9,756.00
+B002,Garlic Bread,97,23,2.80,64.40
+B003,Mexico Bun,154,5,3.80,19.00
+C001,Tiramisu,422,30,22.80,684.00
+C002,Black Forest,185,15,20.80,312.00
+C003,Rum Raisin,200,0,24.80,0
+K001,Ginger Bread Cookies,200,0,6.80,0
+K002,Choco Chip Cookies,88,31,8.80,272.80
+>>>>>>> refs/remotes/origin/main
