@@ -1,5 +1,4 @@
 import java.util.*;
-
 public class Main {
 	private static Scanner sc = new Scanner(System.in);
 
@@ -7,10 +6,9 @@ public class Main {
 		System.out.println("\nWelcome to The Kooks!");
 		System.out.println("Please choose the following options: ");
 		System.out.println("1. Customer Log In");
-		System.out.println("2. Start Order");
-		System.out.println("3. Admin Log In");
-		System.out.println("4. Customer Registration");
-		System.out.println("5. Exit");
+		System.out.println("2. Admin Log In");
+		System.out.println("3. Customer Registration");
+		System.out.println("4. Exit");
 		System.out.print("Enter your choice: ");
 		
 		String opt1 = sc.nextLine(); //Read user input
@@ -25,6 +23,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		User user = new User();
+		Order order = new Order();
 		String selectedOpt; //Display Main page (options)
 		
 		do {
@@ -32,25 +31,20 @@ public class Main {
             
             switch(selectedOpt) {
                 case "1":
-                    System.out.println("Customer Log in");
-                    user.customerLogin();
-                    break;
+    			System.out.println("Customer Log in");
+    			user.customerLogin();
+    			break;
                     
                 case "2":
-                    System.out.println("Start Order");
-                    // call method from Order class
-                    break;
-                    
-                case "3":
                     System.out.println("Admin Login");
                     user.adminLogin();
                     break;
                     
-                case "4":
+                case "3":
                     System.out.println("Customer Registration");
 					user.customerRegistration();
                     break;
-				case "5":
+				case "4":
 					System.out.println("Thank you for visiting The Kooks! Goodbye.");
                     break;
 				default:
@@ -62,9 +56,10 @@ public class Main {
                 sc.nextLine();
             }
             
-        } while (!selectedOpt.equals("5"));
+        } while (!selectedOpt.equals("4"));
         
         sc.close();
+
     }
 
 }
