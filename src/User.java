@@ -5,20 +5,20 @@ public class User {
     Order order = new Order();
     Item item = new Item();
 
-    // Static list to hold all users in memory
-    private static final String path_User = "user.csv"; 
+    // Constants and Static Variables
+    private static final String PATH_USER = "user.csv"; 
     private static final ArrayList<User> allUsers = new ArrayList<>();
-
-    // Admin credentials
     private final String adminUserName = "Admin";
     private final String adminPassword = "123";
+
+    // User Information
     private String uId;
     private String uType; // "Walk_In", "Online"
     private String uPassword;
     private String uName;
     private String uPhone;
 
-
+    // Scanner for input
     Scanner sc = new Scanner(System.in);
     
     // Constructor for only Customer
@@ -33,8 +33,47 @@ public class User {
     public User() {
     }
 
+    //Setter
+    public void setUid() {
+    System.out.print("Enter your ID: ");
+    uId = sc.nextLine();
+    }
+
+    public void setPassword(){
+        System.out.println("Enter your password: ");
+        uPassword = sc.nextLine();
+    }
+
+    public void setName(){
+    System.out.println("Enter your name: ");
+        uName = sc.nextLine();
+    }
+
+    public void setPhone(){
+        System.out.println("Enter your phone number: ");
+        uPhone = sc.nextLine();
+    }
+
+    // Getter
+    public String getUId(){
+        return uId;
+    }
+    public String getUType() {  
+        return uType;
+    }
+    public String getUPassword() {
+        return uPassword;
+    }
+    public String getUName() {
+        return uName;
+    }
+    public String getUPhone() {
+        return uPhone;
+    }
+
+    // Load Customer Data from CSV
     public static void loadCustomersFromCSV() {
-        try (BufferedReader reader = new BufferedReader(new FileReader(path_User))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(PATH_USER))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] data = line.split(",");
@@ -53,8 +92,9 @@ public class User {
         }
     }
 
+    // Save New Customer to CSV
     public void saveCustomerToCSV(User user) {
-    try (BufferedWriter writer = new BufferedWriter(new FileWriter(path_User, true))) {
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(PATH_USER, true))) {
         String customerData = user.getUId() + "," +
                              user.getUType() + "," +
                              user.getUPassword() + "," +
@@ -66,6 +106,17 @@ public class User {
     }
     }
 
+    // Check if user ID already exists
+    private boolean isUserIdTaken(String userId) {
+        for (User user : allUsers) {
+            if (user.getUId().equals(userId)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Handle Customer Registration
     public void customerRegistration() {
         System.out.println("\n=== Customer Registration ===");
         System.out.println("Enter your user type: ");
@@ -76,12 +127,33 @@ public class User {
         int choice = sc.nextInt();
         sc.nextLine(); // Consume newline
 
+        // Exit early if user chooses to cancel
+        if (choice == 0) {
+            System.out.println("Registration cancelled. Exiting...");
+            return;  // Exit the method without creating a user
+        }
+        
+        // Handle invalid choices
+        if (choice != 1 && choice != 2) {
+            System.out.println("Invalid choice. Going back to main page...");
+            return;  // Exit the method without creating a user
+        }
+
+        // Get user ID first and check if it's already taken
+        System.out.print("Create your ID: ");
+        uId = sc.nextLine();
+        
+        // Check if ID is already taken
+        if (isUserIdTaken(uId)) {
+            System.out.println("User ID already exists. Please try again with a different ID.");
+            return;  // Exit the method without creating a user
+        }
+
         switch(choice){
             case 1:
                 uType = "Walk_In";
                 System.out.println("=== Please enter your details below ===");
-                System.out.print("Create your ID: ");
-                uId = sc.nextLine();
+                uPassword = "N/A";  // Set default password for Walk-In users
                 System.out.print("Create your name: ");
                 uName = sc.nextLine();
                 System.out.print("Enter your phone number: ");
@@ -90,8 +162,6 @@ public class User {
             case 2:
                 uType = "Online";
                 System.out.println("=== Please enter your details below ===");
-                System.out.print("Create your ID: ");
-                uId = sc.nextLine();
                 System.out.print("Create your password: ");
                 uPassword = sc.nextLine();
                 System.out.print("Create your name: ");
@@ -99,20 +169,12 @@ public class User {
                 System.out.print("Enter your phone number: ");
                 uPhone = sc.nextLine();
                 break;
-            case 0: System.out.println("Registration cancelled. Exiting...");
-             break;  
-            default:
-                System.out.println("Invalid choice. Going back to main page...");
-            }     
+        }     
       
-
-        // Create and add new user
+        // Create and add new user to CSV
         User newUser = new User(uId, uType, uPassword, uName, uPhone);
         allUsers.add(newUser);
-        System.out.println("Registration successful! for " +uName + "!");
-
         saveCustomerToCSV(newUser);
-
         System.out.println("Registration successful! Welcome, " + uName + "!");
     }
 
@@ -128,13 +190,16 @@ public class User {
         int typeChoice = sc.nextInt();
         sc.nextLine();
 
-        if (typeChoice == 1) {
-        uType = "Walk_In";
-        } else if (typeChoice == 2) {
+        switch(typeChoice) {
+        case 1:
+            uType = "Walk_In";
+            break;
+        case 2:
             uType = "Online";
-        } else {
+            break;
+        default:
             System.out.println("Invalid choice. Returning to main menu...");
-            return;
+        return;
         }
 
         while (!loggedIn && attempts > 0) {
@@ -209,44 +274,6 @@ public class User {
             System.out.println("You have exceeded the maximum number of attempts. Exiting...");
         }
     }
-    
-    public void setUid() {
-        System.out.print("Enter your ID: ");
-        uId = sc.nextLine();
-    }
-
-    public void setPassword(){
-        System.out.println("Enter your password: ");
-        uPassword = sc.nextLine();
-
-    }
-
-    public void setName(){
-    System.out.println("Enter your name: ");
-        uName = sc.nextLine();
-    }
-
-    public void setPhone(){
-        System.out.println("Enter your phone number: ");
-        uPhone = sc.nextLine();
-    }
-
-    // Getter
-    public String getUId(){
-        return uId;
-    }
-    public String getUType() {  
-        return uType;
-    }
-    public String getUPassword() {
-        return uPassword;
-    }
-    public String getUName() {
-        return uName;
-    }
-    public String getUPhone() {
-        return uPhone;
-    }
 
     public void adminMenu(){
         System.out.println("\n=== Welcome to Admin Menu ===");
@@ -275,12 +302,15 @@ public class User {
                         " | Name: " + user.getUName() + 
                         " | Phone: " + user.getUPhone());
                 }
-
                 break;
 
             case 2:
-                //View Inventory.csv
-                //Call method from Item class to do events
+                System.out.println("\n=== View Inventory List ===");
+                try {
+                    //item.displayInventory(); // Assuming there's a method in Item class to display inventory
+                } catch (Exception e) {
+                    System.out.println("Error displaying inventory: " + e.getMessage());
+                }
                 break;
 
             case 3:
@@ -298,12 +328,9 @@ public class User {
 
             default:
                 System.out.println("Invalid Choice! Please try again.");
-
         }
-
     }
     
-    //Edited by JJ 9:43pm
     public void customerMenu(){
         System.out.println("\n=== Welcome to The Kooks! ===");
         System.out.println("1. Start Order");
@@ -322,7 +349,6 @@ public class User {
 
         switch (choice) {
             case 1:
-
                 try {
                     // 1. Display menu
                     System.out.println("=== Welcome to Our Bakery ===");
@@ -355,11 +381,7 @@ public class User {
                     
                     // 4. Checkout process
                     if (!cart.getItems().isEmpty()) {
-                        // System.out.println("\n=== Checkout ===");
-                        // System.out.print("Enter your phone number: ");
                         String phone = this.getUPhone();
-                        
-                        // System.out.print("Order type (online/walkin): ");
                         String type = this.getUType();
                         
                         Order order = new Order(phone, type);
@@ -373,15 +395,16 @@ public class User {
                     
                 } catch (Exception e) {
                     System.err.println("System error: " + e.getMessage());
-                } break;
+                } 
+                break;
 
             case 2:
                 try {
-                Order.displayCustomerHistory(this.getUPhone());
-            } catch (IOException e) {
-                System.out.println("Error accessing order history: " + e.getMessage());
-            }
-            break;
+                    Order.displayCustomerHistory(this.getUPhone());
+                } catch (IOException e) {
+                    System.out.println("Error accessing order history: " + e.getMessage());
+                }
+                break;
 
             case 0:
                 System.out.println("Exiting...");
@@ -389,18 +412,6 @@ public class User {
 
             default:
                 System.out.println("Invalid Choice! Please try again.");
-
         }
-
     }
-
-    static {
-        new User("C001", "Walk_In", "123", "Customer1", "123");
-        new User("C002", "Walk_In", "123", "Customer2", "123");
-        new User("C003", "Online", "1234", "Customer3", "123");
-        new User("C004", "Online", "1234", "Customer4", "123");
-    }
-
 }
-
-
