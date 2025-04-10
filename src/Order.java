@@ -5,7 +5,7 @@ import java.time.format.DateTimeFormatter; // Format date and dt
 
 public class Order {
 	
-	private int latestOrderId = 0;
+	private static int latestOrderId = 0;
 	private String orderId;
     private String custPhone;
     
@@ -13,12 +13,12 @@ public class Order {
     private String type; // Online or WalkIn
     
 	//path to csv file
-	private final String path = "src/orders.csv";
+	private static final String path = "src/orders.csv";
 	
 	
 	
 	//Instantiate Buffered REader
-	{
+	static {
 	    loadLastOrderNumber();
 	}
     
@@ -50,7 +50,7 @@ public class Order {
     }
     
 	// Load last used number from orders.csv
-    public synchronized void loadLastOrderNumber() {
+    public static synchronized void loadLastOrderNumber() {
     	File file = new File(path);
         if (!file.exists()) {
             latestOrderId = 0;
@@ -94,7 +94,7 @@ public class Order {
     }
     
     // Helper method to print file contents
-    public void printFileContents(String filePath) {
+    public static void printFileContents(String filePath) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -105,7 +105,7 @@ public class Order {
         }
     }
     
-    public void main(String[] args) {
+    public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         
         try {
@@ -163,7 +163,7 @@ public class Order {
         }
     }
     
-    public void displayMenu() throws IOException {
+    public static void displayMenu() throws IOException {
         System.out.println("\n=== Today's Menu ===");
         try (BufferedReader reader = new BufferedReader(new FileReader("src/Inventory.csv"))) {
             // Skip header
