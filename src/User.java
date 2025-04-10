@@ -275,12 +275,17 @@ public class User {
         }
     }
 
-    public void adminMenu(){
+    // Replace the entire adminMenu() method with this fixed version
+    public void adminMenu() {
+        boolean adminInMenu = true;
+    
+        while (adminInMenu) {
         System.out.println("\n=== Welcome to Admin Menu ===");
         System.out.println("1. View Customer list");
-        System.out.println("2. View Inventory List");
+        System.out.println("2. Inventory Management");
         System.out.println("3. Generate Sales Report");
         System.out.println("4. Exit");
+        System.out.print("Enter your choice: ");
 
         int choice;
         try {
@@ -289,7 +294,7 @@ public class User {
         } catch (InputMismatchException e) {
             System.out.println("Invalid input! Please enter a number.");
             sc.nextLine(); // Clear invalid input
-            return;
+            continue;
         }
 
         switch (choice) {
@@ -302,34 +307,117 @@ public class User {
                         " | Name: " + user.getUName() + 
                         " | Phone: " + user.getUPhone());
                 }
+                System.out.println("\nPress Enter to continue...");
+                sc.nextLine();
                 break;
 
             case 2:
-                System.out.println("\n=== View Inventory List ===");
-                try {
-                    //item.displayInventory(); // Assuming there's a method in Item class to display inventory
-                } catch (Exception e) {
-                    System.out.println("Error displaying inventory: " + e.getMessage());
-                }
+                handleInventoryManagement();
                 break;
 
             case 3:
                 try {
-        			item.report();
-    			} catch (IOException e) {
-        			System.out.println("Error reading menu file: " + e.getMessage());
-    			}
-    			break;
+                    item.report();
+                    System.out.println("\nPress Enter to continue...");
+                    sc.nextLine();
+                } catch (IOException e) {
+                    System.out.println("Error reading menu file: " + e.getMessage());
+                    System.out.println("\nPress Enter to continue...");
+                    sc.nextLine();
+                }
+                break;
 
             case 4:
-                System.out.println("Exiting...");
-                // Main Page
+                System.out.println("Exiting to main menu...");
+                adminInMenu = false;
                 break;
 
             default:
                 System.out.println("Invalid Choice! Please try again.");
+                System.out.println("\nPress Enter to continue...");
+                sc.nextLine();
         }
     }
+}
+
+// Add this new method to handle inventory management
+private void handleInventoryManagement() {
+    boolean inventoryMenu = true;
+    
+    while (inventoryMenu) {
+        System.out.println("\n=== Inventory Management ===");
+        System.out.println("1. View Inventory List");
+        System.out.println("2. Add New Item");
+        System.out.println("3. Remove Item");
+        System.out.println("4. Restock Item");
+        System.out.println("5. Edit Item Price");
+        System.out.println("0. Return to Admin Menu");
+        System.out.print("Enter your choice: ");
+        
+        int invChoice;
+        try {
+            invChoice = sc.nextInt();
+            sc.nextLine(); // Consume newline
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input! Please enter a number.");
+            sc.nextLine(); // Clear invalid input
+            continue;
+        }
+        
+        if (invChoice == 0) {
+            System.out.println("Returning to Admin Menu...");
+            return; // Exit the method entirely
+        }
+        
+        switch (invChoice) {
+            case 1:
+                try {
+                    item.report();
+                } catch (IOException e) {
+                    System.out.println("Error displaying inventory: " + e.getMessage());
+                }
+                break;
+            case 2:
+                try {
+                    item.addItem();
+                    System.out.println("Item added successfully!");
+                } catch (IOException e) {
+                    System.out.println("Error adding item: " + e.getMessage());
+                }
+                break;
+            case 3:
+                try {
+                    item.removeItem();
+                    System.out.println("Item removed successfully!");
+                } catch (IOException e) {
+                    System.out.println("Error removing item: " + e.getMessage());
+                }
+                break;
+            case 4:
+                try {
+                    item.restock();
+                    System.out.println("Item restocked successfully!");
+                } catch (IOException e) {
+                    System.out.println("Error restocking item: " + e.getMessage());
+                }
+                break;
+            case 5:
+                try {
+                    item.editPrice();
+                    System.out.println("Price updated successfully!");
+                } catch (IOException e) {
+                    System.out.println("Error updating price: " + e.getMessage());
+                }
+                break;
+            default:
+                System.out.println("Invalid choice! Please try again.");
+        }
+        
+        // Only prompt to continue if we're staying in the inventory menu
+        System.out.println("\nPress Enter to continue...");
+        sc.nextLine();
+    }
+}
     
     public void customerMenu(){
         System.out.println("\n=== Welcome to The Kooks! ===");
@@ -383,6 +471,7 @@ public class User {
                     if (!cart.getItems().isEmpty()) {
                         String phone = this.getUPhone();
                         String type = this.getUType();
+                
                         
                         Order order = new Order(phone, type);
                         cart.checkout(order);
