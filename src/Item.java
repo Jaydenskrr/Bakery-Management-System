@@ -179,7 +179,6 @@ public class Item {
 		}
 	}
 	
-	
 	public static void main(String[] args) throws IOException {
 		Item open = new Item();
 //		open.addItem();
