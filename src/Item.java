@@ -2,8 +2,6 @@ import java.io.*; //BufferedReader, FileReader, IOException
 //import java.text.DateFormat.Field;
 import java.util.*; // ArrayList, Array, List
 
-
-
 public class Item {
 	
 	private String itemId, itemName;
@@ -33,7 +31,7 @@ public class Item {
 			//calling BufferedReader rr to read from CSV file
 			rr = new BufferedReader(new FileReader(path));
 			rr.readLine();
-			  System.out.printf("%-8s %-20s %-12s %-10s %-10s %-15s%n", 
+			  System.out.printf("%-8s %-22s %-10s %-10s %-10s %-15s%n", 
 			            "ID", "Item Name", "Price", "Stock", "Sold", "Total Sales");
 			        System.out.println("-------------------------------------------------------------------------------");
 
@@ -41,7 +39,7 @@ public class Item {
             while ((line = rr.readLine()) != null) {
                 String[] parts = line.split(",");
                 if (parts.length >= 6) {
-                    System.out.printf("%-8s %-20s %-12s %-10s %-10s %-15s\n", 
+                    System.out.printf("%-8s %-22s %-10.2f %-10s %-10s %-15.2f\n", 
                     		parts[0], 
                     		parts[1], 
                     		Double.parseDouble(parts[4]), 
@@ -65,14 +63,14 @@ public class Item {
 			rr = new BufferedReader(new FileReader(path));
 			
 			rr.readLine();
-			 System.out.printf("%-8s %-20s %-12s %-8s\n", "ID", "Item Name", "Price", "Stock");
+			 System.out.printf("%-8s %-22s %-12s %-8s\n", "ID", "Item Name", "Price", "Stock");
 		        System.out.println("-----------------------------------------------");
 		    
             String line;
             while ((line = rr.readLine()) != null) {
                 String[] parts = line.split(",");
                 if (parts.length >= 5) {
-                    System.out.printf("%-8s %-20s RM%-9.2f %-8s\n", parts[0], parts[1], Double.parseDouble(parts[4]), parts[2]);
+                    System.out.printf("%-8s %-22s RM%-9.2f %-8s\n", parts[0], parts[1], Double.parseDouble(parts[4]), parts[2]);
 				}
 				
 			}
@@ -101,7 +99,6 @@ public class Item {
 			uw = new BufferedWriter(new FileWriter(path,true));
 			uw.write(newData);
 			uw.newLine();
-			
 			
 		} catch(Exception e) {
 			
@@ -256,7 +253,7 @@ public class Item {
 				String[] fields = line.split(",");
 				
 				if(fields.length >= 3 && fields[0].equals(append)) {
-	                double price = Double.parseDouble(fields[PRICE_COLUMN]);
+//	                double price = Double.parseDouble(fields[PRICE_COLUMN]);
 					fields[PRICE_COLUMN] = String.valueOf(newPrice);
 					found = true;
 				
