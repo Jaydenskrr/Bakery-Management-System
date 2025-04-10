@@ -1,0 +1,5 @@
+orderId,productId,quantity,unitPrice,totalPrice
+ORD-004,B001,2,6.80,13.60
+ORD-004,C001,1,22.80,22.80
+ORD-005,B001,2,6.80,13.60
+ORD-005,C001,1,22.80,22.80

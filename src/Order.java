@@ -45,6 +45,10 @@ public class Order {
         return orderId;
     }
     
+    public String getOrderId() {
+    	return orderId;
+    }
+    
 	// Load last used number from orders.csv
     private static synchronized void loadLastOrderNumber() {
     	File file = new File(path);
@@ -91,14 +95,54 @@ public class Order {
     
     public static void main(String[] args) {
         try {
+            // 1. Initialize components
+            System.out.println("=== Initializing Bakery System ===");
             Cart cart = new Cart();
-            cart.addItem("B001", 2);
-            
             Order order = new Order("+60123456789", "online");
-            order.saveOrderToCSV(cart);
-            System.out.println("Order created: " + order.orderId);
+            
+            // 2. Add items to cart
+            System.out.println("\n=== Adding Items to Cart ===");
+            cart.addItem("B001", 2);  // 2 Baguettes
+            cart.addItem("C001", 1);  // 1 Tiramisu
+            cart.displayCart();
+            
+            // 3. Process checkout
+            System.out.println("\n=== Processing Checkout ===");
+            cart.checkout(order);
+            System.out.println("Order completed with ID: " + order.getOrderId());
+            
+            // 4. Verify files were created
+            System.out.println("\n=== Verifying Files ===");
+            System.out.println("orders.csv exists: " + new File("src/orders.csv").exists());
+            System.out.println("order_items.csv exists: " + new File("src/order_items.csv").exists());
+            System.out.println("Inventory updated: " + new File("src/Inventory.csv").exists());
+            
+            // 5. Display order details from files
+            System.out.println("\n=== Order Details ===");
+            System.out.println("--- orders.csv ---");
+            printFileContents("src/orders.csv");
+            
+            System.out.println("\n--- order_items.csv ---");
+            printFileContents("src/order_items.csv");
+            
+            System.out.println("\n--- Inventory.csv ---");
+            printFileContents("src/Inventory.csv");
+            
         } catch (Exception e) {
+            System.err.println("Error during test: " + e.getMessage());
             e.printStackTrace();
+        }
+    }
+
+    // Helper method to print file contents
+    private static void printFileContents(String filePath) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+        } catch (IOException e) {
+            System.err.println("Error reading file: " + filePath);
         }
     }
 }
