@@ -264,7 +264,7 @@ public class Item {
 				String[] fields = line.split(",");
 				
 				if(fields.length >= 3 && fields[0].equals(append)) {
-	                double price = Integer.parseInt(fields[PRICE_COLUMN]);
+	                double price = Double.parseDouble(fields[PRICE_COLUMN]);
 					fields[PRICE_COLUMN] = String.valueOf(newPrice);
 					found = true;
 				
