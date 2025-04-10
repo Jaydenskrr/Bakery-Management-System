@@ -61,10 +61,10 @@ public class Cart {
 
     // Save order to CSV
     public void checkout(Order order) throws IOException {
-        if (items.isEmpty()) throw new IllegalStateException("Cart is empty");
-        order.saveOrderToCSV(this); // Saves order details
-        updateInventory();     // Updates stock
-        clearCart();           // Resets cart
+        validateStock();
+        order.saveOrderToCSV(this);
+        updateInventory();
+        clearCart();
     }
 
     private void saveOrder(String orderId, String customerPhone, String orderType) throws IOException {
