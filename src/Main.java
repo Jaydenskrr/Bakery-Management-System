@@ -13,7 +13,7 @@ public class Main {
 		
 		String opt1 = sc.nextLine(); //Read user input
 		
-		while (!opt1.matches("[1-5]")) {
+		while (!opt1.matches("[1-4]")) {
             System.out.println("Invalid input! Please enter 1, 2, 3, 4 or 5");
             opt1 = sc.nextLine();
         }
@@ -24,7 +24,8 @@ public class Main {
 	public static void main(String[] args) {
 		User user = new User();
 		Order order = new Order();
-		String selectedOpt; //Display Main page (options)
+		String selectedOpt; 
+		User.loadCustomersFromCSV(); // Load customers when the program starts
 		
 		do {
             selectedOpt = mainPage();

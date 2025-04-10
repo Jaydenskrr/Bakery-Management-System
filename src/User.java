@@ -1,11 +1,12 @@
 import java.io.*;
 import java.util.*;
-public class User {
 
+public class User {
     Order order = new Order();
     Item item = new Item();
 
     // Static list to hold all users in memory
+    private static final String path_User = "user.csv"; 
     private static final ArrayList<User> allUsers = new ArrayList<>();
 
     // Admin credentials
@@ -30,6 +31,39 @@ public class User {
     }
 
     public User() {
+    }
+
+    public static void loadCustomersFromCSV() {
+        try (BufferedReader reader = new BufferedReader(new FileReader(path_User))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] data = line.split(",");
+                if (data.length == 5) {
+                    String uId = data[0];
+                    String uType = data[1];
+                    String uPassword = data[2];
+                    String uName = data[3];
+                    String uPhone = data[4];
+                    User user = new User(uId, uType, uPassword, uName, uPhone);
+                    allUsers.add(user);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error loading customer data: " + e.getMessage());
+        }
+    }
+
+    public void saveCustomerToCSV(User user) {
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(path_User, true))) {
+        String customerData = user.getUId() + "," +
+                             user.getUType() + "," +
+                             user.getUPassword() + "," +
+                             user.getUName() + "," +
+                             user.getUPhone() + "\n";
+        writer.write(customerData);
+    } catch (IOException e) {
+        System.out.println("Error saving customer data: " + e.getMessage());
+    }
     }
 
     public void customerRegistration() {
@@ -76,6 +110,10 @@ public class User {
         User newUser = new User(uId, uType, uPassword, uName, uPhone);
         allUsers.add(newUser);
         System.out.println("Registration successful! for " +uName + "!");
+
+        saveCustomerToCSV(newUser);
+
+        System.out.println("Registration successful! Welcome, " + uName + "!");
     }
 
     public void customerLogin() {
@@ -145,48 +183,6 @@ public class User {
         System.out.println("You have exceeded the maximum number of attempts. Returning to main menu...");
     }
 
-            // switch(typeChoice){
-            //     case 1: 
-            //     uType = "Walk_In";
-            //     System.out.println("Please enter your ID: ");
-            //     sc.nextLine();
-            //     String inId = sc.nextLine();
-            //     System.out.println("Please enter your phone number: ");
-            //     String inPhone = sc.nextLine();
-            //     for(User user : allUsers){
-            //         if(user.getUId().equals(inId) & user.getUPhone().equals(inPhone) && user.getUType().equals(uType)){
-            //             System.out.println("Login Successful!!!");
-            //             System.out.println("Welcome " + user.getUName() + "!");
-            //             customerMenu();
-            //             return;
-            //         }
-            //     }
-            //     System.out.println("Invalid ID or password. Please try again.");
-            //     break;
-            // case 2: 
-            //     uType = "Online";
-            //     System.out.println("Please enter your ID: ");
-            //     sc.nextLine();
-            //     String inId1 = sc.nextLine();
-            //     System.out.println("Please enter your password: ");
-            //     String inPass1 = sc.nextLine();
-            //     for(User user : allUsers){
-            //         if(user.getUId().equals(inId1) & user.getUPassword().equals(inPass1) && user.getUType().equals(uType)){
-            //             System.out.println("Login Successful!!!");
-            //             System.out.println("Welcome " + user.getUName() + "!");
-            //             customerMenu();
-
-            //             return;
-            //         }
-            //     }
-            //     System.out.println("Invalid ID or password. Please try again.");
-            //     break;
-            // default:
-            //     System.out.println("Invalid choice. Going back to main page...");
-            //     // Main page
-        
-            // }
-
     }
 
     public void adminLogin() {
@@ -201,7 +197,7 @@ public class User {
         String inPass = sc.nextLine();
         
         if (inName.equals(adminUserName) && inPass.equals(adminPassword)){
-            System.out.println("Welcome" + adminUserName + "!");
+            System.out.println("Welcome " + adminUserName + "!");
             loggedIn = true;
             adminMenu();
          } else {
@@ -211,7 +207,6 @@ public class User {
         }
         if (!loggedIn) {
             System.out.println("You have exceeded the maximum number of attempts. Exiting...");
-            // Back to Main page (Loop)
         }
     }
     
@@ -234,12 +229,6 @@ public class User {
     public void setPhone(){
         System.out.println("Enter your phone number: ");
         uPhone = sc.nextLine();
-    }
-
-    public void storeData() {
-        for(User user : allUsers){
-        allUsers.add((user));
-        }
     }
 
     // Getter
@@ -266,18 +255,27 @@ public class User {
         System.out.println("3. Generate Sales Report");
         System.out.println("4. Exit");
 
-        int choice = sc.nextInt();
+        int choice;
         try {
             choice = sc.nextInt();
             sc.nextLine(); // Consume newline
         } catch (InputMismatchException e) {
             System.out.println("Invalid input! Please enter a number.");
             sc.nextLine(); // Clear invalid input
+            return;
         }
 
         switch (choice) {
             case 1:
-                // Customer List (Arraylist)
+                System.out.println("\n=== Registered Customer List ===");
+                System.out.println("Total customers: " + allUsers.size());
+                for (User user : allUsers) {
+                    System.out.println("ID: " + user.getUId() + 
+                        " | Type: " + user.getUType() + 
+                        " | Name: " + user.getUName() + 
+                        " | Phone: " + user.getUPhone());
+                }
+
                 break;
 
             case 2:
@@ -312,13 +310,14 @@ public class User {
         System.out.println("2. Order History");
         System.out.println("0. Exit");
 
-        int choice = sc.nextInt();
+        int choice;
         try {
             choice = sc.nextInt();
             sc.nextLine(); // Consume newline
         } catch (InputMismatchException e) {
             System.out.println("Invalid input! Please enter a number.");
             sc.nextLine(); // Clear invalid input
+            return;
         }
 
         switch (choice) {
@@ -356,12 +355,12 @@ public class User {
                     
                     // 4. Checkout process
                     if (!cart.getItems().isEmpty()) {
-                        System.out.println("\n=== Checkout ===");
-                        System.out.print("Enter your phone number: ");
-                        String phone = sc.nextLine();
+                        // System.out.println("\n=== Checkout ===");
+                        // System.out.print("Enter your phone number: ");
+                        String phone = this.getUPhone();
                         
-                        System.out.print("Order type (online/walkin): ");
-                        String type = sc.nextLine();
+                        // System.out.print("Order type (online/walkin): ");
+                        String type = this.getUType();
                         
                         Order order = new Order(phone, type);
                         cart.checkout(order);
@@ -374,24 +373,18 @@ public class User {
                     
                 } catch (Exception e) {
                     System.err.println("System error: " + e.getMessage());
-                } finally {
-                    sc.close();
-                }
-                        break;
+                } break;
 
             case 2:
-                System.out.print("Enter customer phone number: ");
-                String phone = sc.nextLine();
                 try {
-                    Order.displayCustomerHistory(phone);
-                } catch (IOException e) {
-                    System.out.println("Error accessing order history: " + e.getMessage());
-                }
-                break;
+                Order.displayCustomerHistory(this.getUPhone());
+            } catch (IOException e) {
+                System.out.println("Error accessing order history: " + e.getMessage());
+            }
+            break;
 
             case 0:
                 System.out.println("Exiting...");
-                // Main Page
                 break;
 
             default:
@@ -402,10 +395,10 @@ public class User {
     }
 
     static {
-        new User("C001", "Walk_In", "123", "Customer1", "1234567890");
-        new User("C002", "Walk_In", "123", "Customer2", "9876543210");
-        new User("C003", "Online", "1234", "Customer3", "5551112222");
-        new User("C004", "Online", "1234", "Customer4", "5553334444");
+        new User("C001", "Walk_In", "123", "Customer1", "123");
+        new User("C002", "Walk_In", "123", "Customer2", "123");
+        new User("C003", "Online", "1234", "Customer3", "123");
+        new User("C004", "Online", "1234", "Customer4", "123");
     }
 
 }
