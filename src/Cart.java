@@ -40,16 +40,15 @@ public class Cart {
     }
 
     // Remove item from cart
-    public boolean removeItem(String itemId) {
-        int index = itemIds.indexOf(itemId);
-        if (index >= 0) {
+    public void removeItem(int index) {
+        if (index >= 0 && index < itemIds.size()) {
             itemIds.remove(index);
             itemNames.remove(index);
             unitPrices.remove(index);
             quantities.remove(index);
-            return true;
+        } else {
+            throw new IndexOutOfBoundsException("Invalid item index");
         }
-        return false;
     }
 
     // Calculate total
@@ -72,6 +71,18 @@ public class Cart {
                 unitPrices.get(i));
         }
         System.out.printf("TOTAL: RM%.2f%n", getTotal());
+    }
+    
+    public List<String> getCartItems() {
+        List<String> items = new ArrayList<>();
+        for (int i = 0; i < itemIds.size(); i++) {
+            items.add(String.format("%s - %s (x%d) RM%.2f", 
+                itemIds.get(i), 
+                itemNames.get(i),
+                quantities.get(i),
+                unitPrices.get(i)));
+        }
+        return items;
     }
 
     // Save order to CSV
@@ -164,12 +175,9 @@ public class Cart {
     private void validateStock() throws IOException {
         for (int i = 0; i < itemIds.size(); i++) {
             String[] product = findProductInInventory(itemIds.get(i));
-            int stock = Integer.parseInt(product[2]); // Stock column
+            int stock = Integer.parseInt(product[2]);
             if (stock < quantities.get(i)) {
-                throw new IllegalStateException(
-                    "Insufficient stock for " + itemNames.get(i) + 
-                    " (Available: " + stock + ")"
-                );
+                throw new IllegalStateException("Insufficient stock for " + itemNames.get(i) + " (Available: " + stock + ")");
             }
         }
     }
