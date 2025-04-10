@@ -27,6 +27,7 @@ public class Order {
 	}
 	
 	public Order(String custPhone, String type) {
+		this();
 	    this.custPhone = custPhone;
 	    this.type = type;
 	    
@@ -39,6 +40,7 @@ public class Order {
 	
 	// Generates sequential order IDs (ORD-001, ORD-002...)
     public String generateOrderId() {
+    	latestOrderId++;
         orderId = "ORD-" + String.format("%03d", latestOrderId);
         return orderId;
     }
@@ -99,6 +101,4 @@ public class Order {
             e.printStackTrace();
         }
     }
-
-
 }

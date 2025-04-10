@@ -1,7 +1,7 @@
 ItemID,ItemName,Stock,Sold,UnitPrice,TotalSales
-B001,Baguette,9,11,6.80,74.80
+B001,Baguette,5,15,6.80,102.00
 B002,Garlic Bread,20,0,2.80,0
-B003,Mexico Bun,18,2,3.80,7.60
+B003,Mexico Bun,14,6,3.80,22.80
 C001,Tiramisu,5,15,22.80,342.00
 C002,Black Forest,20,0,20.80,0
 C003,Rum Raisin,20,0,24.80,0

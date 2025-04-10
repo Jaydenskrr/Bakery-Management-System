@@ -18,6 +18,11 @@ public class Cart {
         }
         //modify
         
+        int stock = Integer.parseInt(productData[2]);
+        if (stock < quantity) {
+            throw new IllegalStateException("Insufficient stock for " + productData[1]);
+        }
+        
         itemIds.add(itemId);
         itemNames.add(productData[1]);
         unitPrices.add(Double.parseDouble(productData[4]));
@@ -61,8 +66,12 @@ public class Cart {
 
     // Save order to CSV
     public void checkout(Order order) throws IOException {
+    	if (itemIds.isEmpty()) {
+            throw new IllegalStateException("Cannot checkout empty cart");
+        }
+    	
         validateStock();
-        order.saveOrderToCSV(this);
+        order.saveOrderToCSV(this); //why this?
         updateInventory();
         clearCart();
     }
@@ -88,7 +97,7 @@ public class Cart {
     }
 
     private void updateInventory() throws IOException {
-        List<String> inventoryLines = new ArrayList<>();
+        ArrayList<String> inventoryLines = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(path_Inventory))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -152,17 +161,14 @@ public class Cart {
     
     public static void main(String[] args) {
         try {
-        	
-        	
             Cart cart = new Cart();
-            cart.addItem("B001", 2); // 2 Baguettes
-            cart.addItem("C001", 1); // 1 Tiramisu
-//            cart.removeItem("B005");
+            cart.addItem("B003", 2);
             cart.displayCart();
             
-            cart.checkout("+60123456789", "online");
+            Order order = new Order("+60123456789", "online");
+            cart.checkout(order);
         } catch (Exception e) {
-            System.err.println("Error: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }
