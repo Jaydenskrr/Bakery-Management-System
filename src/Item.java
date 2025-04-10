@@ -303,7 +303,7 @@ public class Item {
 		Item open = new Item();
 //		open.addItem();
 //		open.removeItem();
-		open.editPrice();
+		open.report();
 		
 	}
 }

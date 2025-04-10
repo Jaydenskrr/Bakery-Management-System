@@ -14,7 +14,7 @@ public class Main {
 		String opt1 = sc.nextLine(); //Read user input
 		
 		while (!opt1.matches("[1-4]")) {
-            System.out.println("Invalid input! Please enter 1, 2, 3, 4 or 5");
+            System.out.println("Invalid input! Please enter 1, 2, 3, 4");
             opt1 = sc.nextLine();
         }
         return opt1;
