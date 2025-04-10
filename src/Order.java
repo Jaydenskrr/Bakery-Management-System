@@ -50,7 +50,7 @@ public class Order {
     }
     
 	// Load last used number from orders.csv
-    private static synchronized void loadLastOrderNumber() {
+    public static synchronized void loadLastOrderNumber() {
     	File file = new File(path);
         if (!file.exists()) {
             latestOrderId = 0;
@@ -94,7 +94,7 @@ public class Order {
     }
     
     // Helper method to print file contents
-    private static void printFileContents(String filePath) {
+    public static void printFileContents(String filePath) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -163,7 +163,7 @@ public class Order {
         }
     }
     
-    private static void displayMenu() throws IOException {
+    public static void displayMenu() throws IOException {
         System.out.println("\n=== Today's Menu ===");
         try (BufferedReader reader = new BufferedReader(new FileReader("src/Inventory.csv"))) {
             // Skip header

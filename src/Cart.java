@@ -98,7 +98,7 @@ public class Cart {
         clearCart();
     }
 
-    private void saveOrderItems(String orderId) throws IOException {
+    public void saveOrderItems(String orderId) throws IOException {
         File itemsFile = new File("src/order_items.csv");
         boolean needsHeader = !itemsFile.exists() || itemsFile.length() == 0;
         
@@ -122,7 +122,7 @@ public class Cart {
         }
     }
 
-    private void updateInventory() throws IOException {
+    public void updateInventory() throws IOException {
         ArrayList<String> inventoryLines = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(path_Inventory))) {
             String line;
@@ -151,14 +151,14 @@ public class Cart {
         }
     }
 
-    private void clearCart() {
+    public void clearCart() {
         itemIds.clear();
         itemNames.clear();
         unitPrices.clear();
         quantities.clear();
     }
 
-    private String[] findProductInInventory(String itemId) throws IOException {
+    public String[] findProductInInventory(String itemId) throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(path_Inventory))) {
             reader.readLine(); // Skip header
             String line;
@@ -172,7 +172,7 @@ public class Cart {
         return null;
     }
     
-    private void validateStock() throws IOException {
+    public void validateStock() throws IOException {
         for (int i = 0; i < itemIds.size(); i++) {
             String[] product = findProductInInventory(itemIds.get(i));
             int stock = Integer.parseInt(product[2]);
