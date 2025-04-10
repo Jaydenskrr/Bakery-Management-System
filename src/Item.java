@@ -22,65 +22,53 @@ public class Item {
 	//to store each line read
 	String line = "";
 	
-	//ArrayList to store the data
-	ArrayList<ArrayList<String>> data = new ArrayList<>();
-	
 	ArrayList<String> copy = new ArrayList<>();
 	ArrayList<String> update = new ArrayList<>();
 	
 	//display method for report
 	public void report() throws IOException {
+		System.out.println("\n=== Kooks Sales Report ===");
 		try {
 			//calling BufferedReader rr to read from CSV file
 			rr = new BufferedReader(new FileReader(path));
-			while((line = rr.readLine()) != null) {
-				
-				//storing temporary lines into an array value
-				//removing "," and replace with " "
-				String[] value = line.split(",");
-				
-				//creating a new ArrayList with values from array value
-				ArrayList<String> row = new ArrayList<>(Arrays.asList(value));
-				
-				//adding data into the ArrayList
-				data.add(row);
-				
+			
+			rr.readLine();
+			System.out.printf("%-8s %-20s %-10s %-10s %-10 %-20", "ID", "Item Name", "Price", "Stock", "Sold", "Total Sales");
+		    System.out.println("------------------------------------------------------------------------------------------");
+
+		    String line;
+            while ((line = rr.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length >= 5) {
+                    System.out.printf("%-8s %-20s RM%-9.2f %-8s\n", parts[0], parts[1], Double.parseDouble(parts[4]), parts[2], parts[3], parts[5]);
 				}
-			for(ArrayList<String> row : data) {
-				System.out.println(row);
 				
 			}
+				
+		}catch(Exception e) {
 			
-		} catch(Exception e) {
-			e.printStackTrace();
-		} finally {
-			rr.close();
-		}
+		}	
 	}
 	
 	// display method for menu 
 	public void menu() throws IOException{
+		System.out.println("\n=== Kooks Menu ===");
 		try {
 			
 			rr = new BufferedReader(new FileReader(path));
 			
-			String headerLine = rr.readLine();
+			rr.readLine();
+			System.out.printf("%-8s %-20s %-10s", "ID", "Item Name", "Price");
+		    System.out.println("----------------------------------------");
+		            
 			
-			if (headerLine == null) return;
 			
-			
-			
-			while((line = rr.readLine()) != null) {
-				
-				String [] fields = line.split(",");
-				
-				//fields.length determines the number of desired fields/variables to be printed
-				if (fields.length >= 4) {
-					String itemId = fields[0];
-					String itemName = fields[1];
-					String unitPrice = fields[2];
-					
-					System.out.println("ID: " +itemId + ", Name: " +itemName + ", Unit Price: " +unitPrice);
+		    
+            String line;
+            while ((line = rr.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length >= 5) {
+                    System.out.printf("%-8s %-20s RM%-9.2f %-8s\n", parts[0], parts[1], Double.parseDouble(parts[4]), parts[2]);
 				}
 				
 			}
