@@ -126,34 +126,32 @@ public class Cart {
     }
 
     private void updateInventory() throws IOException {
-        // Read all inventory lines
-        List<String> inventoryLines = new ArrayList<>();
+        // Read all lines first
+        ArrayList<String> lines = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(path_Inventory))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                inventoryLines.add(line);
+                lines.add(line);
             }
         }
 
-        // Update inventory data in memory
-        for (int i = 1; i < inventoryLines.size(); i++) { // Skip header
-            String[] fields = inventoryLines.get(i).split(",");
+        // Update in memory
+        for (int i = 1; i < lines.size(); i++) { // Skip header
+            String[] fields = lines.get(i).split(",");
             int itemIndex = itemIds.indexOf(fields[0]);
-            
             if (itemIndex >= 0) {
-                // Update stock and sold quantities
                 int stock = Integer.parseInt(fields[2]) - quantities.get(itemIndex);
                 int sold = Integer.parseInt(fields[3]) + quantities.get(itemIndex);
                 fields[2] = String.valueOf(stock);
                 fields[3] = String.valueOf(sold);
                 fields[5] = String.format("%.2f", Double.parseDouble(fields[4]) * sold);
-                inventoryLines.set(i, String.join(",", fields));
+                lines.set(i, String.join(",", fields));
             }
         }
 
-        // Write back to file
+        // Write back to original file
         try (FileWriter writer = new FileWriter(path_Inventory)) {
-            for (String line : inventoryLines) {
+            for (String line : lines) {
                 writer.write(line + "\n");
             }
         }

@@ -1,5 +1,5 @@
 import java.io.*; //BufferedReader, FileReader, IOException
-import java.text.DateFormat.Field;
+//import java.text.DateFormat.Field;
 import java.util.*; // ArrayList, Array, List
 
 
@@ -7,7 +7,8 @@ import java.util.*; // ArrayList, Array, List
 public class Item {
 	
 	private String itemId, itemName;
-	private int sold, stock;
+	private int sold;
+	private int stock;
 	private double unitPrice, totalSales;
 	
 	//path to csv file
@@ -31,7 +32,6 @@ public class Item {
 		try {
 			//calling BufferedReader rr to read from CSV file
 			rr = new BufferedReader(new FileReader(path));
-			
 			rr.readLine();
 			  System.out.printf("%-8s %-20s %-12s %-10s %-10s %-15s%n", 
 			            "ID", "Item Name", "Price", "Stock", "Sold", "Total Sales");
@@ -41,12 +41,18 @@ public class Item {
             while ((line = rr.readLine()) != null) {
                 String[] parts = line.split(",");
                 if (parts.length >= 6) {
-                    System.out.printf("%-8s %-20s %-12s %-10s %-10s %-15s\n", parts[0], parts[1], Double.parseDouble(parts[4]), parts[2], parts[3].isEmpty() ? "0" : parts[3],  parts[5].isEmpty() ? 0 : Double.parseDouble(parts[5]));
+                    System.out.printf("%-8s %-20s %-12s %-10s %-10s %-15s\n", 
+                    		parts[0], 
+                    		parts[1], 
+                    		Double.parseDouble(parts[4]), 
+                    		parts[2], 
+                    		parts[3].isEmpty() ? "0" : parts[3],  
+                    		parts[5].isEmpty() ? 0 : Double.parseDouble(parts[5]));
 				}
 				
 			}
 				
-		}catch(Exception e) {
+		} catch(Exception e) {
 			
 		}	
 	}
@@ -61,8 +67,6 @@ public class Item {
 			rr.readLine();
 			 System.out.printf("%-8s %-20s %-12s %-8s\n", "ID", "Item Name", "Price", "Stock");
 		        System.out.println("-----------------------------------------------");
-			
-			
 		    
             String line;
             while ((line = rr.readLine()) != null) {
