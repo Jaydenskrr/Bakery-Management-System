@@ -192,7 +192,7 @@ public class Cart {
                     itemNames.get(i), stock, quantities.get(i)));
             }
         }
-    }
+	}
     
     public void clearCart() {
         itemIds.clear();

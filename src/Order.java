@@ -213,36 +213,96 @@ public class Order {
         }
     }
 
-    private static void displayOrderItems(String orderId) throws IOException {
-        File itemsFile = new File(path_orderItem);
-        if (!itemsFile.exists()) {
-            System.out.println("(No items found)");
-            return;
-        }
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(itemsFile))) {
-            // Skip header if exists
-            reader.readLine();
+ 
+    
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        try {
+            System.out.println("=== Bakery System Test ===");
             
-            String line = reader.readLine();
-            boolean foundItems = false;
+            // 1. Display menu
+            System.out.println("\n--- Current Menu ---");
+            Order.displayMenu();
             
-            while (line != null) {
-                if (line.trim().isEmpty()) {
-                	continue;
-                }
+            // 2. Create test orders for same customer
+            String testPhone = "0123456789";
+            List<Order> testOrders = new ArrayList<>();
+            
+            // First order
+            Order order1 = new Order(testPhone, "online");
+            Cart cart1 = new Cart();
+            cart1.addItem("B001", 1); // Baguette
+            cart1.addItem("C001", 1); // Tiramisu
+            order1.completeOrder();
+            cart1.checkout(order1);
+            testOrders.add(order1);
+            
+            // Second order
+            Order order2 = new Order(testPhone, "walkin");
+            Cart cart2 = new Cart();
+            cart2.addItem("K002", 2); // Choco Chip Cookies
+            cart2.addItem("B002", 3); // Garlic Bread
+            order2.completeOrder();
+            cart2.checkout(order2);
+            testOrders.add(order2);
+            
+            // 3. Display all order history for this customer
+            System.out.println("\n=== Complete Order History for " + testPhone + " ===");
+            
+            // Get all orders from file
+            List<String> customerOrders = Order.getCustomerOrders(testPhone);
+            if (customerOrders.isEmpty()) {
+                System.out.println("No orders found for this customer");
+                return;
+            }
+            
+            double totalSpent = 0;
+            int orderCount = 0;
+            
+            // Print each order with details
+            for (String orderData : customerOrders) {
+                String[] fields = orderData.split(",");
+                String orderId = fields[0];
+                String date = fields[2];
+                String type = fields[4];
+                String status = fields[5];
+                double total = Double.parseDouble(fields[3]);
                 
-                String[] columns = line.split(",");
-                if (columns[0].equals(orderId)) {
-                    System.out.printf("- %s x%s @ RM%s each (Total: RM%s)%n",
-                        columns[1], columns[2], columns[3], columns[4]);
-                    foundItems = true;
-                }
+                totalSpent += total;
+                orderCount++;
+                
+                System.out.printf("\nOrder #%d: %s | %s | %s | %s | RM%.2f%n",
+                    orderCount, orderId, date, type, status, total);
+                
+                System.out.println("Items:");
+                Order.displayOrderItems(orderId);
             }
             
-            if (!foundItems) {
-                System.out.println("(No items found for this order)");
-            }
+            // Print summary
+            System.out.printf("\n=== Summary ===%n");
+            System.out.printf("Total Orders: %d%n", orderCount);
+            System.out.printf("Total Spent: RM%.2f%n", totalSpent);
+            
+            // 4. Verify files
+            System.out.println("\n--- Verifying Files ---");
+            System.out.println("Orders file has " + countLines(Order.path_order) + " records");
+            System.out.println("Order items file has " + countLines(Order.path_orderItem) + " records");
+            
+        } catch (Exception e) {
+            System.err.println("Test failed: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            scanner.close();
+            System.out.println("\n=== Test Completed ===");
         }
+    }
+    
+    private static int countLines(String filePath) throws IOException {
+        int lines = 0;
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            while (reader.readLine() != null) lines++;
+        }
+        return lines;
     }
 }
