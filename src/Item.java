@@ -33,14 +33,15 @@ public class Item {
 			rr = new BufferedReader(new FileReader(path));
 			
 			rr.readLine();
-			System.out.printf("%-8s %-20s %-10s %-10s %-10 %-20", "ID", "Item Name", "Price", "Stock", "Sold", "Total Sales");
-		    System.out.println("------------------------------------------------------------------------------------------");
+			  System.out.printf("%-8s %-20s %-12s %-10s %-10s %-15s%n", 
+			            "ID", "Item Name", "Price", "Stock", "Sold", "Total Sales");
+			        System.out.println("-------------------------------------------------------------------------------");
 
 		    String line;
             while ((line = rr.readLine()) != null) {
                 String[] parts = line.split(",");
-                if (parts.length >= 5) {
-                    System.out.printf("%-8s %-20s RM%-9.2f %-8s\n", parts[0], parts[1], Double.parseDouble(parts[4]), parts[2], parts[3], parts[5]);
+                if (parts.length >= 6) {
+                    System.out.printf("%-8s %-20s %-12s %-10s %-10s %-15s\n", parts[0], parts[1], Double.parseDouble(parts[4]), parts[2], parts[3].isEmpty() ? "0" : parts[3],  parts[5].isEmpty() ? 0 : Double.parseDouble(parts[5]));
 				}
 				
 			}
@@ -52,15 +53,14 @@ public class Item {
 	
 	// display method for menu 
 	public void menu() throws IOException{
-		System.out.println("\n=== Kooks Menu ===");
+		System.out.println("\n========== Kooks Menu ============");
 		try {
 			
 			rr = new BufferedReader(new FileReader(path));
 			
 			rr.readLine();
-			System.out.printf("%-8s %-20s %-10s", "ID", "Item Name", "Price");
-		    System.out.println("----------------------------------------");
-		            
+			 System.out.printf("%-8s %-20s %-12s %-8s\n", "ID", "Item Name", "Price", "Stock");
+		        System.out.println("-----------------------------------------------");
 			
 			
 		    
@@ -292,7 +292,7 @@ public class Item {
 //		open.addItem();
 //		open.removeItem();
 		open.report();
-		
+		open.menu();
 	}
 }
 
