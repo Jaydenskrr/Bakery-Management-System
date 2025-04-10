@@ -1,4 +1,4 @@
-//import java.util.*;
+import java.util.*;
 import java.io.*;
 import java.time.LocalDateTime; // Get System date and dt
 import java.time.format.DateTimeFormatter; // Format date and dt
@@ -93,47 +93,6 @@ public class Order {
         }
     }
     
-    public static void main(String[] args) {
-        try {
-            // 1. Initialize components
-            System.out.println("=== Initializing Bakery System ===");
-            Cart cart = new Cart();
-            Order order = new Order("+60123456789", "online");
-            
-            // 2. Add items to cart
-            System.out.println("\n=== Adding Items to Cart ===");
-            cart.addItem("B001", 2);  // 2 Baguettes
-            cart.addItem("C001", 1);  // 1 Tiramisu
-            cart.displayCart();
-            
-            // 3. Process checkout
-            System.out.println("\n=== Processing Checkout ===");
-            cart.checkout(order);
-            System.out.println("Order completed with ID: " + order.getOrderId());
-            
-            // 4. Verify files were created
-            System.out.println("\n=== Verifying Files ===");
-            System.out.println("orders.csv exists: " + new File("src/orders.csv").exists());
-            System.out.println("order_items.csv exists: " + new File("src/order_items.csv").exists());
-            System.out.println("Inventory updated: " + new File("src/Inventory.csv").exists());
-            
-            // 5. Display order details from files
-            System.out.println("\n=== Order Details ===");
-            System.out.println("--- orders.csv ---");
-            printFileContents("src/orders.csv");
-            
-            System.out.println("\n--- order_items.csv ---");
-            printFileContents("src/order_items.csv");
-            
-            System.out.println("\n--- Inventory.csv ---");
-            printFileContents("src/Inventory.csv");
-            
-        } catch (Exception e) {
-            System.err.println("Error during test: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
     // Helper method to print file contents
     private static void printFileContents(String filePath) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
@@ -143,6 +102,83 @@ public class Order {
             }
         } catch (IOException e) {
             System.err.println("Error reading file: " + filePath);
+        }
+    }
+    
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        try {
+            // 1. Display menu
+            System.out.println("=== Welcome to Our Bakery ===");
+            displayMenu();
+            
+            // 2. Initialize cart
+            Cart cart = new Cart();
+            boolean ordering = true;
+            
+            // 3. Ordering loop
+            while (ordering) {
+                System.out.print("\nEnter product ID to add to cart (or 'checkout' to finish): ");
+                String input = scanner.nextLine().trim();
+                
+                if (input.equalsIgnoreCase("checkout")) {
+                    ordering = false;
+                } else {
+                    try {
+                        System.out.print("Enter quantity: ");
+                        int quantity = Integer.parseInt(scanner.nextLine());
+                        
+                        cart.addItem(input, quantity);
+                        System.out.println("Added to cart!");
+                        cart.displayCart();
+                    } catch (Exception e) {
+                        System.out.println("Error: " + e.getMessage());
+                    }
+                }
+            }
+            
+            // 4. Checkout process
+            if (!cart.getItems().isEmpty()) {
+                System.out.println("\n=== Checkout ===");
+                System.out.print("Enter your phone number: ");
+                String phone = scanner.nextLine();
+                
+                System.out.print("Order type (online/walkin): ");
+                String type = scanner.nextLine();
+                
+                Order order = new Order(phone, type);
+                cart.checkout(order);
+                
+                System.out.println("\nOrder completed! Your order ID is: " + order.getOrderId());
+                System.out.println("Thank you for your purchase!");
+            } else {
+                System.out.println("Your cart is empty. Goodbye!");
+            }
+            
+        } catch (Exception e) {
+            System.err.println("System error: " + e.getMessage());
+        } finally {
+            scanner.close();
+        }
+    }
+    
+    private static void displayMenu() throws IOException {
+        System.out.println("\n=== Today's Menu ===");
+        try (BufferedReader reader = new BufferedReader(new FileReader("src/Inventory.csv"))) {
+            // Skip header
+            reader.readLine();
+            
+            String line;
+            System.out.printf("%-8s %-20s %-10s %-8s\n", 
+                "ID", "Item Name", "Price", "Stock");
+            System.out.println("----------------------------------------");
+            
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                System.out.printf("%-8s %-20s RM%-9.2f %-8s\n",
+                    parts[0], parts[1], Double.parseDouble(parts[4]), parts[2]);
+            }
         }
     }
 }

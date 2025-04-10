@@ -11,6 +11,14 @@ public class Cart {
     private ArrayList<Integer> quantities = new ArrayList<>();
     
     private static final String path_Inventory = "src/Inventory.csv";
+    
+    public boolean isEmpty() {
+        return itemIds.isEmpty();
+    }
+
+    public List<String> getItems() {
+        return new ArrayList<>(itemIds); // Return copy for safety
+    }
 
     // Add item to cart
     public void addItem(String itemId, int quantity) throws IOException {
