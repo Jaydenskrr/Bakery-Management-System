@@ -1,7 +1,7 @@
 import java.io.*;
+import java.util.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*; // Get System date and dt
 
 public class Order {
 	
@@ -10,16 +10,27 @@ public class Order {
     private String custPhone;
     private String type; // Online or WalkIn
     private OrderStatus status;
+    private LocalDateTime orderDate;
     
 	//paths to csv file
 	private static final String path_order = "src/orders.csv";
     private static final String path_orderItem = "src/order_items.csv";
     private static final String path_Inventory = "src/Inventory.csv";
     
-	public enum OrderStatus {
-        PAYMENT_PENDING, 
-        COMPLETED,
-        CANCELLED
+    public enum OrderStatus {
+        PAYMENT_PENDING("Payment Pending"),
+        COMPLETED("Completed"),
+        CANCELLED("Cancelled");
+        
+        private final String displayName;
+        
+        OrderStatus(String displayName) {
+            this.displayName = displayName;
+        }
+        
+        public String getDisplayName() {
+            return displayName;
+        }
     }
 
 	static {
@@ -29,6 +40,7 @@ public class Order {
 	public Order() {
 		orderId = generateOrderId();
         status = OrderStatus.PAYMENT_PENDING;
+        orderDate = LocalDateTime.now();
 	}
 	
 	public Order(String custPhone, String type) {
@@ -37,12 +49,15 @@ public class Order {
 	    this.type = type;
 	}
 	
-    //Status
-    public void markAsPaid() {
+    //Status management
+	public void completeOrder() {
         this.status = OrderStatus.COMPLETED;
     }
     
-    // Status check methods
+    public void cancelOrder() {
+        this.status = OrderStatus.CANCELLED;
+    }
+    
     public boolean isPaymentPending() {
         return status == OrderStatus.PAYMENT_PENDING;
     }
@@ -51,21 +66,26 @@ public class Order {
         return status == OrderStatus.COMPLETED;
     }
     
-    // Getter
-    public OrderStatus getStatus() {
-        return status;
+    public boolean isCancelled() {
+        return status == OrderStatus.CANCELLED;
     }
+    
+    // Getter
+    public String getOrderId() { return orderId; }
+    public String getCustPhone() { return custPhone; }
+    public String getType() { return type; }
+    public OrderStatus getStatus() { return status; }
+    public LocalDateTime getOrderDate() { return orderDate; }
+
 	
-	// Generates sequential order IDs (ORD-001, ORD-002...)
+    /* METHODS */
+    
     public String generateOrderId() {
     	latestOrderId++;
         orderId = "ORD-" + String.format("%03d", latestOrderId);
         return orderId;
     }
     
-    public String getOrderId() {
-    	return orderId;
-    }
     
 	// Load last used number from orders.csv
     public static synchronized void loadLastOrderNumber() {
@@ -96,17 +116,16 @@ public class Order {
     
     public void saveOrderToCSV(Cart cart) throws IOException {
     	try (FileWriter writer = new FileWriter(path_order, true)) {
-    		LocalDateTime dt = LocalDateTime.now();
-    		dt.toString();
-    		DateTimeFormatter dtTemp = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-    		String formattedDT = dt.format(dtTemp);
-    		
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+            String formattedDate = orderDate.format(formatter);
+            
             writer.write(String.join(",",
                 orderId,
                 custPhone,
-                formattedDT,
+                formattedDate,
                 String.format("%.2f", cart.getTotal()),
-                type
+                type,
+                status.toString()
             ) + "\n");
         }
     }
@@ -129,15 +148,18 @@ public class Order {
             // Skip header
             reader.readLine();
             
-            String line;
             System.out.printf("%-8s %-20s %-10s %-8s\n", 
                 "ID", "Item Name", "Price", "Stock");
             System.out.println("----------------------------------------");
             
+            String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
-                System.out.printf("%-8s %-20s RM%-9.2f %-8s\n",
-                    parts[0], parts[1], Double.parseDouble(parts[4]), parts[2]);
+                if (parts.length >= 5) {
+                    System.out.printf("%-8s %-20s RM%-9.2f %-8s\n",
+                        parts[0], parts[1], 
+                        Double.parseDouble(parts[4]), parts[2]);
+                }
             }
         }
     }
@@ -151,7 +173,7 @@ public class Order {
         }
 
         try (BufferedReader reader = new BufferedReader(new FileReader(ordersFile))) {
-            // Skip header if exists
+            // Skip header
             reader.readLine();
             
             String line;
@@ -182,9 +204,9 @@ public class Order {
             System.out.println("\nOrder ID: " + orderData[0]);
             System.out.println("Date: " + orderData[2]);
             System.out.println("Type: " + orderData[4]);
+            System.out.println("Status: " + orderData[5]);
             System.out.println("Total: RM" + orderData[3]);
             
-            // Display order items
             System.out.println("Items:");
             displayOrderItems(orderData[0]);
         }
@@ -192,16 +214,22 @@ public class Order {
 
     private static void displayOrderItems(String orderId) throws IOException {
         File itemsFile = new File(path_orderItem);
-        if (!itemsFile.exists()) return;
+        if (!itemsFile.exists()) {
+            System.out.println("(No items found)");
+            return;
+        }
 
         try (BufferedReader reader = new BufferedReader(new FileReader(itemsFile))) {
             // Skip header if exists
             reader.readLine();
             
-            String line;
+            String line = reader.readLine();
             boolean foundItems = false;
-            while ((line = reader.readLine()) != null) {
-                if (line.trim().isEmpty()) continue;
+            
+            while (line != null) {
+                if (line.trim().isEmpty()) {
+                	continue;
+                }
                 
                 String[] columns = line.split(",");
                 if (columns[0].equals(orderId)) {
@@ -216,65 +244,4 @@ public class Order {
             }
         }
     }
-
-
-    //  Main method for testing
-    // public static void main(String[] args) {
-    //         Scanner sc = new Scanner(System.in);
-            
-    //         try {
-    //             // 1. Display menu
-    //             System.out.println("=== Welcome to Our Bakery ===");
-    //             displayMenu();
-                
-    //             // 2. Initialize cart
-    //             Cart cart = new Cart();
-    //             boolean ordering = true;
-                
-    //             // 3. Ordering loop
-    //             while (ordering) {
-    //                 System.out.print("\nEnter product ID to add to cart (or 'checkout' to finish): ");
-    //                 String input = sc.nextLine().trim();
-                    
-    //                 if (input.equalsIgnoreCase("checkout")) {
-    //                     ordering = false;
-    //                 } else {
-    //                     try {
-    //                         System.out.print("Enter quantity: ");
-    //                         int quantity = Integer.parseInt(sc.nextLine());
-                            
-    //                         cart.addItem(input, quantity);
-    //                         System.out.println("Added to cart!");
-    //                         cart.displayCart();
-    //                     } catch (Exception e) {
-    //                         System.out.println("Error: " + e.getMessage());
-    //                     }
-    //                 }
-    //             }
-                
-    //             // 4. Checkout process
-    //             if (!cart.getItems().isEmpty()) {
-    //                 System.out.println("\n=== Checkout ===");
-    //                 System.out.print("Enter your phone number: ");
-    //                 String phone = sc.nextLine();
-                    
-    //                 System.out.print("Order type (online/walkin): ");
-    //                 String type = sc.nextLine();
-                    
-    //                 Order order = new Order(phone, type);
-    //                 cart.checkout(order);
-                    
-    //                 System.out.println("\nOrder completed! Your order ID is: " + order.getOrderId());
-    //                 System.out.println("Thank you for your purchase!");
-    //             } else {
-    //                 System.out.println("Your cart is empty. Goodbye!");
-    //             }
-                
-    //         } catch (Exception e) {
-    //             System.err.println("System error: " + e.getMessage());
-    //         } finally {
-    //             sc.close();
-    //         }
-    //     }
-
 }
