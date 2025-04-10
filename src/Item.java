@@ -1,13 +1,14 @@
 import java.io.*; //BufferedReader, FileReader, IOException
+import java.text.DateFormat.Field;
 import java.util.*; // ArrayList, Array, List
 
 
 
 public class Item {
 	
-//	private String itemId, itemName;
-//	private int sold;
-//	private double unitPrice, totalSales;
+	private String itemId, itemName;
+	private int sold, stock;
+	private double unitPrice, totalSales;
 	
 	
 	
@@ -18,7 +19,10 @@ public class Item {
 	//instantiating BufferedReader
 	BufferedReader rr = null;
 	BufferedReader mr = null;
+	BufferedReader dr = null;
+	BufferedWriter ur = null;
 	BufferedWriter nr = null;
+	Scanner input = new Scanner(System.in);
 
 	
 	//to store each line read
@@ -91,11 +95,25 @@ public class Item {
 	}
 	
 	
-	public void newItem(String data) throws IOException {
+	public void addItem() throws IOException {
+		
+		System.out.println("Enter new item ID:" );
+		itemId = input.nextLine();
+		System.out.println("Enter new item name: ");
+		itemName = input.nextLine();
+		System.out.println("Enter stock quantity: ");
+		stock = Integer.parseInt(input.nextLine());
+		System.out.println("Enter unit price: ");
+		unitPrice = Double.parseDouble(input.nextLine());
+
+
+		String newData = String.format("%s,%s,%d,%.2f,%.2f", itemId, itemName, sold, unitPrice, totalSales);
+		
 		try {
 			nr = new BufferedWriter(new FileWriter(path,true));
-			nr.write(data);
+			nr.write(newData);
 			nr.newLine();
+			
 			
 		} catch(Exception e) {
 			
@@ -105,38 +123,59 @@ public class Item {
 		
 	}
 	
-	public static void main(String[] args) throws IOException {
-		Item item = new Item();
-//		item.report();
-//		item.menu();
+	public void removeItem(String delete) throws IOException {
 		
-		String option = "";
+		ArrayList<String> copy = new ArrayList<>();
+		boolean itemFound = false;
 		
-		do {
-			Scanner sc = new Scanner(System.in);
-			System.out.println("1. View Menu");
-			System.out.println("2. View Report");
-			System.out.println("3. Add Items");
-			System.out.println("0. Exit");
-			option = sc.next();
+		try {
+			dr = new BufferedReader(new FileReader(path));
 			
-			switch(option) {
-				case "1" :
-					item.menu();
-					break;
-				case "2" :
-					item.report();
-					break;
-				case "3":
-					item.newItem(option);
-					break;
-				default: System.out.println("Exited");
+			String line = " ";
+			
+			String header = dr.readLine();
+			if(header != null) {
+				copy.add(header);
 			}
 			
-		} while(!option.equals("0"));
-		
-		
+			while((itemFound = dr.readLine() != null)) {
+				String[] fields = line.split(",");
+			
+			
+				if(fields.length > 0 && !fields[0].equals(delete)) {
+					copy.add(line);
+				} else {
+					itemFound = true;
+				}
+			}
+		} catch(Exception e) {
+			
+		} finally {
+			dr.close();
 		}
+		
+		if(!itemFound) {
+			System.out.println("Item was not found " +delete);
+		}
+		
+		try {
+			ur = new BufferedWriter(new FileWriter(path));
+			
+			for(String row : copy) {
+				ur.write(row);
+				ur.newLine();
+			}
+			
+		} catch (Exception e) {
+			
+		} finally {
+			ur.close();
+		}
+	
+	public static void main(String[] args) throws IOException {
+		Item open = new Item();
+		
+	}
 }
 
 	
