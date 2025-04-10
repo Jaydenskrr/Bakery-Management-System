@@ -1,14 +1,21 @@
 ItemID,ItemName,Stock,Sold,UnitPrice,TotalSales
-B001,Baguette,20,0,6.80,0.00
+B001,Baguette,5,15,6.80,102.00
 B002,Garlic Bread,20,0,2.80,0
-B003,Mexico Bun,20,0,3.80,0
-C001,Tiramisu,20,0,22.80,0
+B003,Mexico Bun,14,6,3.80,22.80
+C001,Tiramisu,5,15,22.80,342.00
 C002,Black Forest,20,0,20.80,0
 C003,Rum Raisin,20,0,24.80,0
 K001,Ginger Bread Cookies,20,0,6.80,0
 K002,Choco Chip Cookies,20,0,8.80,0
+<<<<<<< HEAD
+K003,White Choco Macadamia,20,0,8.80,0
+=======
 K003,White Choco Macadamia,20,0,8.80,03
+<<<<<<< HEAD
 
 Z001
 Z002
 Z003,Zebra 3,0,9.90,0.00
+=======
+>>>>>>> d3ee9576d51dabab064af66e327b8525160fbf46
+>>>>>>> refs/remotes/origin/main
