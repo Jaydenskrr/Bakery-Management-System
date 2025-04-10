@@ -10,7 +10,7 @@ public class Cart {
     private ArrayList<Double> unitPrices = new ArrayList<>();
     private ArrayList<Integer> quantities = new ArrayList<>();
     
-    private static final String path_Inventory = "src/Inventory.csv";
+    private final String path_Inventory = "src/Inventory.csv";
     
     public boolean isEmpty() {
         return itemIds.isEmpty();
