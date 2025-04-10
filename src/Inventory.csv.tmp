@@ -1,9 +1,9 @@
 ItemID,ItemName,Stock,Sold,UnitPrice,TotalSales
-B001,Baguette,95,38,18.9,718.20
+B001,Baguette,98,35,18.9,661.50
 B002,Garlic Bread,97,23,2.80,64.40
 B003,Mexico Bun,154,5,3.80,19.00
 C001,Tiramisu,422,30,22.80,684.00
-C002,Black Forest,191,9,20.80,187.20
+C002,Black Forest,200,0,20.80,0
 C003,Rum Raisin,200,0,24.80,0
 K001,Ginger Bread Cookies,200,0,6.80,0
 K002,Choco Chip Cookies,88,31,8.80,272.80

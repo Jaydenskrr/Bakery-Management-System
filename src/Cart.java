@@ -126,40 +126,36 @@ public class Cart {
     }
 
     private void updateInventory() throws IOException {
-        // Create temp file
-        File tempFile = new File(path_Inventory + ".tmp");
-        File inventoryFile = new File(path_Inventory);
-        
-        try (BufferedReader reader = new BufferedReader(new FileReader(inventoryFile));
-             FileWriter writer = new FileWriter(tempFile)) {
-            
-            // Copy header
-            writer.write(reader.readLine() + "\n");
-            
-            // Process each item
+        // Read all inventory lines
+        List<String> inventoryLines = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(path_Inventory))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] fields = line.split(",");
-                int itemIndex = itemIds.indexOf(fields[0]);
-                
-                if (itemIndex >= 0) {
-                    // Update stock and sold quantities
-                    int stock = Integer.parseInt(fields[2]) - quantities.get(itemIndex);
-                    int sold = Integer.parseInt(fields[3]) + quantities.get(itemIndex);
-                    fields[2] = String.valueOf(stock);
-                    fields[3] = String.valueOf(sold);
-                    fields[5] = String.format("%.2f", Double.parseDouble(fields[4]) * sold);
-                }
-                writer.write(String.join(",", fields) + "\n");
+                inventoryLines.add(line);
             }
         }
-        
-        // Replace original file
-        if (!inventoryFile.delete()) {
-            throw new IOException("Could not delete original inventory file");
+
+        // Update inventory data in memory
+        for (int i = 1; i < inventoryLines.size(); i++) { // Skip header
+            String[] fields = inventoryLines.get(i).split(",");
+            int itemIndex = itemIds.indexOf(fields[0]);
+            
+            if (itemIndex >= 0) {
+                // Update stock and sold quantities
+                int stock = Integer.parseInt(fields[2]) - quantities.get(itemIndex);
+                int sold = Integer.parseInt(fields[3]) + quantities.get(itemIndex);
+                fields[2] = String.valueOf(stock);
+                fields[3] = String.valueOf(sold);
+                fields[5] = String.format("%.2f", Double.parseDouble(fields[4]) * sold);
+                inventoryLines.set(i, String.join(",", fields));
+            }
         }
-        if (!tempFile.renameTo(inventoryFile)) {
-            throw new IOException("Could not rename temp inventory file");
+
+        // Write back to file
+        try (FileWriter writer = new FileWriter(path_Inventory)) {
+            for (String line : inventoryLines) {
+                writer.write(line + "\n");
+            }
         }
     }
 
