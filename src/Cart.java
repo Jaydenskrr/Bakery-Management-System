@@ -1,5 +1,7 @@
 import java.io.*;
 import java.util.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Cart {
     // Parallel lists for cart items
@@ -9,6 +11,14 @@ public class Cart {
     private ArrayList<Integer> quantities = new ArrayList<>();
     
     private static final String path_Inventory = "src/Inventory.csv";
+    
+    public boolean isEmpty() {
+        return itemIds.isEmpty();
+    }
+
+    public List<String> getItems() {
+        return new ArrayList<>(itemIds); // Return copy for safety
+    }
 
     // Add item to cart
     public void addItem(String itemId, int quantity) throws IOException {
@@ -72,26 +82,31 @@ public class Cart {
     	
         validateStock();
         order.saveOrderToCSV(this); //why this?
+        saveOrderItems(order.getOrderId());
         updateInventory();
         clearCart();
     }
 
-    private void saveOrder(String orderId, String customerPhone, String orderType) throws IOException {
-        // Save to orders.csv
-        try (FileWriter writer = new FileWriter("src/orders.csv", true)) {
-            writer.write(String.format("%s,%s,%s,%.2f,%s%n",
-                orderId, customerPhone, java.time.LocalDateTime.now(), getTotal(), orderType));
-        }
+    private void saveOrderItems(String orderId) throws IOException {
+        File itemsFile = new File("src/order_items.csv");
+        boolean needsHeader = !itemsFile.exists() || itemsFile.length() == 0;
         
-        // Save to order_items.csv
-        try (FileWriter itemWriter = new FileWriter("src/order_items.csv", true)) {
+        try (FileWriter itemWriter = new FileWriter(itemsFile, true)) {
+            // Write header if needed
+            if (needsHeader) {
+                itemWriter.write("orderId,productId,quantity,unitPrice,totalPrice\n");
+            }
+            
+            // Write each item
             for (int i = 0; i < itemIds.size(); i++) {
-                itemWriter.write(String.format("%s,%s,%d,%.2f,%.2f%n",
+                String line = String.format("%s,%s,%d,%.2f,%.2f%n",
                     orderId,
                     itemIds.get(i),
                     quantities.get(i),
                     unitPrices.get(i),
-                    unitPrices.get(i) * quantities.get(i)));
+                    unitPrices.get(i) * quantities.get(i));
+                
+                itemWriter.write(line);
             }
         }
     }
@@ -156,19 +171,6 @@ public class Cart {
                     " (Available: " + stock + ")"
                 );
             }
-        }
-    }
-    
-    public static void main(String[] args) {
-        try {
-            Cart cart = new Cart();
-            cart.addItem("B003", 2);
-            cart.displayCart();
-            
-            Order order = new Order("+60123456789", "online");
-            cart.checkout(order);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 }

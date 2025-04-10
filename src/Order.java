@@ -1,4 +1,4 @@
-//import java.util.*;
+import java.util.*;
 import java.io.*;
 import java.time.LocalDateTime; // Get System date and dt
 import java.time.format.DateTimeFormatter; // Format date and dt
@@ -45,6 +45,10 @@ public class Order {
         return orderId;
     }
     
+    public String getOrderId() {
+    	return orderId;
+    }
+    
 	// Load last used number from orders.csv
     private static synchronized void loadLastOrderNumber() {
     	File file = new File(path);
@@ -89,16 +93,92 @@ public class Order {
         }
     }
     
+    // Helper method to print file contents
+    private static void printFileContents(String filePath) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+        } catch (IOException e) {
+            System.err.println("Error reading file: " + filePath);
+        }
+    }
+    
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
         try {
-            Cart cart = new Cart();
-            cart.addItem("B001", 2);
+            // 1. Display menu
+            System.out.println("=== Welcome to Our Bakery ===");
+            displayMenu();
             
-            Order order = new Order("+60123456789", "online");
-            order.saveOrderToCSV(cart);
-            System.out.println("Order created: " + order.orderId);
+            // 2. Initialize cart
+            Cart cart = new Cart();
+            boolean ordering = true;
+            
+            // 3. Ordering loop
+            while (ordering) {
+                System.out.print("\nEnter product ID to add to cart (or 'checkout' to finish): ");
+                String input = scanner.nextLine().trim();
+                
+                if (input.equalsIgnoreCase("checkout")) {
+                    ordering = false;
+                } else {
+                    try {
+                        System.out.print("Enter quantity: ");
+                        int quantity = Integer.parseInt(scanner.nextLine());
+                        
+                        cart.addItem(input, quantity);
+                        System.out.println("Added to cart!");
+                        cart.displayCart();
+                    } catch (Exception e) {
+                        System.out.println("Error: " + e.getMessage());
+                    }
+                }
+            }
+            
+            // 4. Checkout process
+            if (!cart.getItems().isEmpty()) {
+                System.out.println("\n=== Checkout ===");
+                System.out.print("Enter your phone number: ");
+                String phone = scanner.nextLine();
+                
+                System.out.print("Order type (online/walkin): ");
+                String type = scanner.nextLine();
+                
+                Order order = new Order(phone, type);
+                cart.checkout(order);
+                
+                System.out.println("\nOrder completed! Your order ID is: " + order.getOrderId());
+                System.out.println("Thank you for your purchase!");
+            } else {
+                System.out.println("Your cart is empty. Goodbye!");
+            }
+            
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("System error: " + e.getMessage());
+        } finally {
+            scanner.close();
+        }
+    }
+    
+    private static void displayMenu() throws IOException {
+        System.out.println("\n=== Today's Menu ===");
+        try (BufferedReader reader = new BufferedReader(new FileReader("src/Inventory.csv"))) {
+            // Skip header
+            reader.readLine();
+            
+            String line;
+            System.out.printf("%-8s %-20s %-10s %-8s\n", 
+                "ID", "Item Name", "Price", "Stock");
+            System.out.println("----------------------------------------");
+            
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                System.out.printf("%-8s %-20s RM%-9.2f %-8s\n",
+                    parts[0], parts[1], Double.parseDouble(parts[4]), parts[2]);
+            }
         }
     }
 }
