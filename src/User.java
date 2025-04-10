@@ -16,7 +16,6 @@ public class User {
 
 
     Scanner sc = new Scanner(System.in);
-    Scanner sc1 = new Scanner (System.in);
     
     // Constructor for only Customer
     public User(String uId, String uType, String uPassword, String uName, String uPhone) {
@@ -38,14 +37,14 @@ public class User {
         while (!loggedIn && atm > 0) {
         System.out.println("\n=== Admin Login ===");
         System.out.println("Please enter your username: ");
-        String inName = sc1.nextLine();
+        String inName = sc.nextLine();
         System.out.println("Please enter your password: ");
-        String inPass = sc1.nextLine();
+        String inPass = sc.nextLine();
         
         if (inName.equals(adminUserName) && inPass.equals(adminPassword)){
             System.out.println("Welcome" + adminUserName + "!");
             loggedIn = true;
-            // adminMenu();
+            adminMenu();
          } else {
             atm--;
             System.out.println("Invalid username or password. Please try again. You have " + atm + " attempts left.");  
@@ -53,10 +52,10 @@ public class User {
         }
         if (!loggedIn) {
             System.out.println("You have exceeded the maximum number of attempts. Exiting...");
+            // Back to Main page (Loop)
         }
     }
 
-    // sop = admin or cusotomer switch case admin (call admin class)
     public void customerRegistration() {
         System.out.println("\n=== Customer Registration ===");
         System.out.println("Enter your user type: ");
@@ -67,7 +66,7 @@ public class User {
             switch(choice){
             case 1:
                 uType = "Walk_In";
-                System.out.println("Please enter your details: ");
+                System.out.println("=== Please enter your details below ===");
                 setUid();
                 sc.nextLine(); // Consume newline
                 setName();
@@ -75,7 +74,7 @@ public class User {
                 break;
             case 2:
                 uType = "Online";
-                System.out.println("Please enter your details: ");
+                System.out.println("=== Please enter your details below ===");
                 setUid();
                 sc.nextLine(); // Consume newline
                 setPassword();
@@ -85,57 +84,64 @@ public class User {
             case 0: System.out.println("Registration cancelled. Exiting...");
              break;  
             default:
-                System.out.println("Invalid choice. Exiting...");
+                System.out.println("Invalid choice. Going back to main page...");
             }     
       
 
 
         allUsers.add(new User(uId, uType, uPassword, uName, uPhone));
         System.out.println("Registration successful!");
+        
     }
 
-    // public void customerRegistration() {  // Removed uType parameter
-    //     System.out.println("\n=== Customer Registration ===");
-    //     System.out.println("1. Walk-In");
-    //     System.out.println("2. Online");
-    //     System.out.println("0. Exit");
-    //     System.out.print("Choose type: ");
-    //     int choice = sc.nextInt();
-    //     sc.nextLine(); // Consume newline
+    public void customerLogin() {
+        System.out.println("\n=== Customer Login ===");
+        System.out.println("Please enter your type: ");
+        System.out.println("1. Walk-In");
+        System.out.println("2. Online");
+        System.out.print("Choose type: ");
+        int typeChoice = sc.nextInt();
+            switch(typeChoice){
+                case 1: 
+                uType = "Walk_In";
+                System.out.println("Please enter your ID: ");
+                sc.nextLine();
+                String inId = sc.nextLine();
+                System.out.println("Please enter your phone number: ");
+                String inPhone = sc.nextLine();
+                for(User user : allUsers){
+                    if(user.getUId().equals(inId) & user.getUPhone().equals(inPhone) && user.getUType().equals(uType)){
+                        System.out.println("Login Successful!!!");
+                        System.out.println("Welcome " + user.getUName() + "!");
+                        return;
+                    }
+                }
+                System.out.println("Invalid ID or password. Please try again.");
+                break;
+            case 2: 
+                uType = "Online";
+                System.out.println("Please enter your ID: ");
+                sc.nextLine();
+                String inId1 = sc.nextLine();
+                System.out.println("Please enter your password: ");
+                String inPass1 = sc.nextLine();
+                for(User user : allUsers){
+                    if(user.getUId().equals(inId1) & user.getUPassword().equals(inPass1) && user.getUType().equals(uType)){
+                        System.out.println("Login Successful!!!");
+                        System.out.println("Welcome " + user.getUName() + "!");
+                        return;
+                    }
+                }
+                System.out.println("Invalid ID or password. Please try again.");
+                break;
+            default:
+                System.out.println("Invalid choice. Going back to main page...");
+                // Main page
         
-    //     if (choice == 0) {
-    //         System.out.println("Registration cancelled.");
-    //         return;
-    //     }
-        
-    //     // Common fields
-    //     setUid();
-    //     setName();
-    //     setPhone();
-        
-    //     // Type-specific fields
-    //     if (choice == 1) {
-    //         uType = "Walk_In";
-    //         uPassword = ""; // No password for walk-in
-    //     } else if (choice == 2) {
-    //         uType = "Online";
-    //         setPassword();
-    //     } else {
-    //         System.out.println("Invalid choice!");
-    //         return;
-    //     }
-        
-    //     // Create and store the new user
-    //     allUsers.add(new User(uId, uType, uPassword, uName, uPhone));
-    //     System.out.println("Registration successful!");
-    // }
+            }
 
-    // public void adminMenu() {
-
-    // }
-
-
-
+    }
+    
     public void setUid() {
         System.out.print("Enter your ID: ");
         uId = sc.nextLine();
@@ -178,6 +184,47 @@ public class User {
     }
     public String getUPhone() {
         return uPhone;
+    }
+
+    public void adminMenu(){
+        System.out.println("\n=== Welcome to Admin Menu ===");
+        System.out.println("1. View Customer list");
+        System.out.println("2. View Inventory List");
+        System.out.println("3. Generate Sales Report");
+        System.out.println("4. Generate Inventory Report");
+        System.out.println("5. Exit");
+
+        int choice = sc.nextInt();
+        try {
+            choice = sc.nextInt();
+            sc.nextLine(); // Consume newline
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input! Please enter a number.");
+            sc.nextLine(); // Clear invalid input
+        }
+
+        switch (choice) {
+            case 1:
+                // Customer List (Arraylist)
+                break;
+            case 2:
+                //Inventory List
+                break;
+            case 3:
+                // Generate Sales report method
+                break;
+            case 4:
+                // Generate Inventory report method
+                break;
+            case 5:
+                System.out.println("Existing...");
+                // Main Page
+                break;
+            default:
+            System.out.println("Invalid Choice! Please try again.");
+
+        }
+
     }
 
     static {
