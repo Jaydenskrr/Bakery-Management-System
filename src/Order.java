@@ -114,8 +114,9 @@ public class Order {
         }
     }
     
-    public void saveOrderToCSV(Cart cart) throws IOException {
+    public void saveOrderToCSV(double totalAmount) throws IOException {
     	try (FileWriter writer = new FileWriter(path_order, true)) {
+    		Cart cart = new Cart();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
             String formattedDate = orderDate.format(formatter);
             
