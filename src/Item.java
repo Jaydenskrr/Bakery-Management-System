@@ -129,7 +129,7 @@ public class Item {
 		String delete = "";
 		
 		System.out.println("Enter item ID you would like to delete: ");
-		read.nextLine();
+		delete = read.nextLine();
 		
 		ArrayList<String> copy = new ArrayList<>();
 		boolean itemFound = false;
@@ -144,7 +144,7 @@ public class Item {
 				copy.add(header);
 			}
 			
-			while((itemFound = dr.readLine() != null)) {
+			while((line = dr.readLine()) != null) {
 				String[] fields = line.split(",");
 			
 			
