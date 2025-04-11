@@ -60,31 +60,50 @@ public class Item {
 	
 	// display method for menu 
 	public void menu() throws IOException{
-		System.out.println("\n========== Kooks Menu ============");
-		try {
-			
-			// instantiating BufferedReader for this method
-			rr = new BufferedReader(new FileReader(path));
-			
-			rr.readLine();
-			
-			 // CLI formatting
-			 System.out.printf("%-8s %-22s %-12s %-8s\n", "ID", "Item Name", "Price", "Stock");
-		        System.out.println("-----------------------------------------------");
-		    
-            String line;
-            while ((line = rr.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length >= 5) {
-                    System.out.printf("%-8s %-22s RM%-9.2f %-8s\n", parts[0], parts[1], Double.parseDouble(parts[4]), parts[2]);
+		File file = new File(path);
+	    long lastUpdated = file.lastModified();
+	    
+	    while (true) {
+	    	if (file.lastModified() != lastUpdated) {
+	            lastUpdated = file.lastModified();
+
+			System.out.println("\n========== Kooks Menu ============");
+			try {
+				
+				// instantiating BufferedReader for this method
+				rr = new BufferedReader(new FileReader(path));
+				
+				rr.readLine();
+				
+				 // CLI formatting
+				 System.out.printf("%-8s %-22s %-12s %-8s\n", "ID", "Item Name", "Price", "Stock");
+			        System.out.println("-----------------------------------------------");
+			    
+	            String line;
+	            while ((line = rr.readLine()) != null) {
+	                String[] parts = line.split(",");
+	                if (parts.length >= 5) {
+	                    System.out.printf("%-8s %-22s RM%-9.2f %-8s\n", parts[0], parts[1], Double.parseDouble(parts[4]), parts[2]);
+					}
+					
 				}
-				
+					
+			} catch(Exception e) {
+					
 			}
-				
-		} catch(Exception e) {
 			
-		}	
-	}
+	    	}
+	    	try {
+		    	Thread.sleep(1000);
+		    } catch(InterruptedException e) {
+		    	Thread.currentThread().interrupt();
+	            break;
+		    }
+	    }
+	    
+	}	
+	    
+	    
 	
 	
 	public void addItem() throws IOException {
@@ -309,4 +328,9 @@ public class Item {
 	
 }
 
-	
+//public static void main(String[] args) throws IOException {
+//	Item item = new Item();
+//	item.addItem();
+//}
+//
+//	
