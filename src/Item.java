@@ -60,13 +60,6 @@ public class Item {
 	
 	// display method for menu 
 	public void menu() throws IOException{
-		File file = new File(path);
-	    long lastUpdated = file.lastModified();
-	    
-	    while (true) {
-	    	if (file.lastModified() != lastUpdated) {
-	            lastUpdated = file.lastModified();
-
 			System.out.println("\n========== Kooks Menu ============");
 			try {
 				
@@ -92,16 +85,33 @@ public class Item {
 					
 			}
 			
-	    	}
-	    	try {
-		    	Thread.sleep(1000);
-		    } catch(InterruptedException e) {
-		    	Thread.currentThread().interrupt();
-	            break;
-		    }
-	    }
-	    
 	}	
+	
+	public void refreshMenu() throws IOException{
+		 File file = new File(path);
+		 long lastModified = file.lastModified();
+		 
+		 menu();
+		 
+		 while (true) {
+		        // Check if file was modified since last check
+		        if (file.lastModified() != lastModified) {
+		            lastModified = file.lastModified();
+		            System.out.println("\nFile updated! Refreshing menu...");
+		            menu();
+		        }
+		        
+		        // Sleep before checking again
+		        try {
+		            Thread.sleep(2000); // Check every 2 seconds
+		        } catch (InterruptedException e) {
+		            Thread.currentThread().interrupt();
+		            break;
+		        }
+		    }
+	}
+
+	    
 	    
 	    
 	
@@ -324,6 +334,11 @@ public class Item {
 			uw.close();
 		}
 		
+	}
+	
+	public static void main(String[] args) throws IOException {
+		Item item = new Item();
+		item.menu();
 	}
 }
 
