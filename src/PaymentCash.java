@@ -1,16 +1,6 @@
 public class PaymentCash implements Payment{
 	private double amountTendered;
     
-    public CashPayment() {
-        this.amountTendered = amountTendered;
-    }
-	
-	@Override
-	public void payment(double amountTendered) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	@Override
 	public boolean processPayment(double amount) {
 		if (amountTendered >= amount) {
@@ -27,6 +17,12 @@ public class PaymentCash implements Payment{
 	@Override
 	public String getPaymentDetails() {
 		return String.format("Cash payment: RM%.2f tendered", amountTendered);
+	}
+
+	@Override
+	public void payment() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

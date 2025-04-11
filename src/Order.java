@@ -122,9 +122,10 @@ public class Order {
                 orderId,
                 custPhone,
                 formattedDate,
-                String.format("%.2f", totalAmount), // Use the passed totalAmount
+                String.format("%.2f", totalAmount),
                 type,
-                status.toString()
+                status.toString(),
+                paymentStatus.toString()  // Add payment status
             ) + "\n");
         }
     }
@@ -219,42 +220,113 @@ public class Order {
         }
     }
     
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        Item item = new Item();
+//    public enum PaymentStatus {
+//        PENDING, COMPLETED, FAILED
+//    }
+    
+    private PaymentStatus paymentStatus;
+    
+    public PaymentStatus getPaymentStatus() {
+        return paymentStatus;
+    }
+    
+    public boolean processPayment(double amount, String paymentType, Scanner scanner) {
+        System.out.println("\n=== Payment Processing ===");
+        System.out.printf("Total Amount: RM%.2f\n", amount);
         
-        try {
-            System.out.println("=== Bakery System Test ===");
-            
-            // 1. Display menu
-            System.out.println("\n--- Current Menu ---");
-            item.menu();
-            
-            // 2. Create test orders for same customer
-            String testPhone = "0123456789";
-            
-            // First order
-            Order order1 = new Order(testPhone, "online");
-            Cart cart1 = new Cart();
-            cart1.addItem("B001", 1); // Baguette
-            cart1.addItem("C002", 3); // Tiramisu
-            order1.completeOrder();
-            cart1.checkout(order1);
-            
-            // Verify order items were saved
-            System.out.println("\n--- Order Items for ORD-" + (latestOrderId) + " ---");
-            Order.displayOrderItems("ORD-" + String.format("%03d", latestOrderId));
-            
-            // 3. Display all order history
-            System.out.println("\n=== Complete Order History ===");
-            Order.displayCustomerHistory(testPhone);
-            
-        } catch (Exception e) {
-            System.err.println("Test failed: " + e.getMessage());
-            e.printStackTrace();
-        } finally {
-            scanner.close();
-            System.out.println("\n=== Test Completed ===");
+        if (paymentType.equalsIgnoreCase("cash")) {
+            return processCashPayment(amount, scanner);
+        } else if (paymentType.equalsIgnoreCase("card")) {
+            return processCardPayment(amount, scanner);
+        } else {
+            System.out.println("Invalid payment method");
+            return false;
         }
     }
+    
+    private boolean processCashPayment(double amount, Scanner scanner) {
+        System.out.print("Enter cash amount tendered: RM");
+        double cash = scanner.nextDouble();
+        scanner.nextLine(); // Consume newline
+        
+        if (cash >= amount) {
+            double change = cash - amount;
+            if (change > 0) {
+                System.out.printf("Change: RM%.2f\n", change);
+            }
+            this.paymentStatus = PaymentStatus.COMPLETED;
+            System.out.println("Cash payment received. Thank you!");
+            return true;
+        } else {
+            System.out.println("Insufficient cash provided.");
+            this.paymentStatus = PaymentStatus.FAILED;
+            return false;
+        }
+    }
+    
+    private boolean processCardPayment(double amount, Scanner scanner) {
+        System.out.println("Processing credit card payment...");
+        System.out.print("Enter card number (16 digits): ");
+        String cardNumber = scanner.nextLine();
+        
+        System.out.print("Enter expiry date (MM/YY): ");
+        String expiry = scanner.nextLine();
+        
+        System.out.print("Enter CVV: ");
+        String cvv = scanner.nextLine();
+        
+        // Simple validation
+        if (cardNumber.length() != 16 || !cardNumber.matches("\\d+")) {
+            System.out.println("Invalid card number");
+            this.paymentStatus = PaymentStatus.FAILED;
+            return false;
+        }
+        
+        // Simulate payment processing
+        System.out.printf("Charging RM%.2f to card ending with %s\n", 
+                        amount, cardNumber.substring(12));
+        System.out.println("Payment approved!");
+        
+        this.paymentStatus = PaymentStatus.COMPLETED;
+        return true;
+    }
+    
+//    public static void main(String[] args) {
+//        Scanner scanner = new Scanner(System.in);
+//        Item item = new Item();
+//        
+//        try {
+//            System.out.println("=== Bakery System Test ===");
+//            
+//            // 1. Display menu
+//            System.out.println("\n--- Current Menu ---");
+//            item.menu();
+//            
+//            // 2. Create test orders for same customer
+//            String testPhone = "0123456789";
+//            
+//            // First order
+//            Order order1 = new Order(testPhone, "online");
+//            Cart cart1 = new Cart();
+//            cart1.addItem("B001", 1); // Baguette
+//            cart1.addItem("C002", 3); // Tiramisu
+//            order1.completeOrder();
+//            cart1.checkout(order1);
+//            
+//            // Verify order items were saved
+//            System.out.println("\n--- Order Items for ORD-" + (latestOrderId) + " ---");
+//            Order.displayOrderItems("ORD-" + String.format("%03d", latestOrderId));
+//            
+//            // 3. Display all order history
+//            System.out.println("\n=== Complete Order History ===");
+//            Order.displayCustomerHistory(testPhone);
+//            
+//        } catch (Exception e) {
+//            System.err.println("Test failed: " + e.getMessage());
+//            e.printStackTrace();
+//        } finally {
+//            scanner.close();
+//            System.out.println("\n=== Test Completed ===");
+//        }
+//    }
 }
