@@ -300,7 +300,7 @@ public class Item {
 			while((line = rr.readLine()) != null) {
 				String[] fields = line.split(",");
 				
-				if(fields.length >= 3 && fields[0].equals(append)) {
+				if(fields.length >= 5 && fields[0].equals(append)) {
 					// reading old price values from CSV, String.valueOf because array is a String, but price is double 
 					fields[PRICE_COLUMN] = String.valueOf(newPrice);
 					found = true;
