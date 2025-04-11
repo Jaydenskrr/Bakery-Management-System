@@ -118,7 +118,7 @@ public class Item {
 		unitPrice = Double.parseDouble(input.nextLine());
 
 		// formatting how the data will be stored into the CSV file
-		String newData = String.format("%s,%s,%d,%.2f,%.2f", itemId, itemName, sold, unitPrice, totalSales);
+		String newData = String.format("%s,%s,%d, %d, %.2f,%.2f", itemId, itemName, stock, sold, unitPrice, totalSales);
 		
 		try {
 			// using the BufferedWriter to write new data entry into the CSV file 
@@ -325,12 +325,6 @@ public class Item {
 		}
 		
 	}
-	
 }
 
-//public static void main(String[] args) throws IOException {
-//	Item item = new Item();
-//	item.addItem();
-//}
-//
-//	
+	
