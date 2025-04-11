@@ -3,8 +3,8 @@ import java.util.*;
 
 public abstract class User {
     // Constants and Static Variables
-    protected static final String PATH_USER = "user.csv"; 
-    protected static final ArrayList<User> allUsers = new ArrayList<>();
+    protected static final String PATH_USER = "user.csv"; // Points to the file where all user data (ID, name, phone, etc.) is stored.
+    protected static final ArrayList<User> allUsers = new ArrayList<>(); // Holds all registered users in memory
     
     // Scanner for input
     protected Scanner sc = new Scanner(System.in);
@@ -65,7 +65,7 @@ public abstract class User {
     // Method to convert user data to CSV format
     public abstract String toCSVString();
     
-    // Static method to create appropriate user type
+    // Static method to create appropriate user type (Create the right subclass based on uType)
     public static User createUser(String uId, String uType, String uPassword, String uName, String uPhone) {
         if (uType.equals("Walk_In")) {
             return new WalkInUser(uId, uName, uPhone);
@@ -77,7 +77,7 @@ public abstract class User {
         return null;
     }
     
-    // Load all users from CSV
+    // Load all users from CSV (Read the user.csv file and populates the allUser list)
     public static void loadCustomersFromCSV() {
         try (BufferedReader reader = new BufferedReader(new FileReader(PATH_USER))) {
             String line;
@@ -101,7 +101,7 @@ public abstract class User {
         }
     }
     
-    // Save new user to CSV
+    // Save new user to CSV (Appends the current user's data into the csv file)
     public void saveCustomerToCSV() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(PATH_USER, true))) {
             writer.write(this.toCSVString() + "\n");
@@ -288,14 +288,38 @@ public abstract class User {
                         
                         // 4. Checkout process
                         if (!cart.getItems().isEmpty()) {
-                            String phone = this.getUPhone();
-                            String type = this.getUserType();
+                            String phone = getUPhone();
+                            String type = getUserType();
                             
                             Order order = new Order(phone, type);
-                            cart.checkout(order);
+                            double totalAmount = cart.getTotal(); // Assuming getTotal() exists in Cart class
                             
-                            System.out.println("\nOrder completed! Your order ID is: " + order.getOrderId());
-                            System.out.println("Thank you for your purchase!");
+                            System.out.println("\n=== Payment Options ===");
+                            System.out.println("1. Cash");
+                            System.out.println("2. Credit Card");
+                            System.out.print("Select payment method (1 or 2): ");
+                            
+                            int paymentChoice;
+                            try {
+                                paymentChoice = Integer.parseInt(sc.nextLine());
+                            } catch (NumberFormatException e) {
+                                System.out.println("Invalid input. Defaulting to cash payment.");
+                                paymentChoice = 1;
+                            }
+                            
+                            String paymentMethod = (paymentChoice == 1) ? "cash" : "card";
+                            boolean paymentSuccess = order.processPayment(totalAmount, paymentMethod, sc);
+                            
+                            if (paymentSuccess) {
+                                order.completeOrder();
+                                cart.checkout(order);
+                                
+                                System.out.println("\nOrder completed! Your order ID is: " + order.getOrderId());
+                                System.out.println("Thank you for your purchase!");
+                            } else {
+                                System.out.println("\nPayment failed. Order has been cancelled.");
+                                order.cancelOrder();
+                            }
                         } else {
                             System.out.println("Your cart is empty. Goodbye!");
                         }
