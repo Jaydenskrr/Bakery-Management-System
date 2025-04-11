@@ -139,7 +139,7 @@ public class Item {
 		} catch(Exception e) {
 			
 		} finally {
-			
+			uw.close();
 		}
 		
 	}
@@ -179,7 +179,7 @@ public class Item {
 		} catch(Exception e) {
 			
 		} finally {
-			
+			rr.close();
 		}
 		
 		// if itemId is not found sysout this line
@@ -198,7 +198,7 @@ public class Item {
 		} catch (Exception e) {
 			
 		} finally {
-			
+			uw.close();
 		}
 	}
 	
@@ -251,7 +251,7 @@ public class Item {
 		} catch (Exception e) {
 			
 		} finally {
-			
+			rr.close();
 		}
 		
 		try {
@@ -265,7 +265,7 @@ public class Item {
 		} catch(Exception e) {
 			
 		} finally {
-		
+			uw.close();
 		}
 		
 	}
@@ -317,7 +317,7 @@ public class Item {
 		} catch (Exception e) {
 			
 		} finally {
-			
+			rr.close();
 		}
 		
 		try {
@@ -331,15 +331,11 @@ public class Item {
 		} catch(Exception e) {
 			
 		} finally {
-			
+			uw.close();
 		}
 		
 	}
 	
-	public static void main(String[] args) throws IOException {
-		Item item = new Item();
-		item.menu();
-	}
 }
 
 	
