@@ -3,6 +3,7 @@ import java.util.*;
 public class Main {
     private static Scanner sc = new Scanner(System.in);
 
+    // Display the main menu and return user's choice
     public static String mainPage() {
         System.out.println("\nWelcome to The Kooks!");
         System.out.println("Please choose the following options: ");
@@ -14,23 +15,25 @@ public class Main {
         
         String opt1 = sc.nextLine(); //Read user input
         
+        // Validate input
         while (!opt1.matches("[1-4]")) {
             System.out.println("Invalid input! Please enter 1, 2, 3, 4");
-            opt1 = sc.nextLine();
+            opt1 = sc.nextLine(); // Return valid option
         }
         return opt1;
     }
 
     public static void main(String[] args) {
-        // Initialize classes for the system
+        // Load existing users and ensure default admin is available
         User.loadCustomersFromCSV(); // Load all users from CSV
         AdminUser.createDefaultAdmin(); // Ensure default admin exists
         
         String selectedOpt;
-		AdminUser adminUser = new AdminUser();
-        
+		AdminUser adminUser = new AdminUser(); // Admin instance to use for login
+
+        // Main program loop
         do {
-            selectedOpt = mainPage();
+            selectedOpt = mainPage(); // Get user choice from main menu
             
             switch(selectedOpt) {
                 case "1":
@@ -57,12 +60,13 @@ public class Main {
                     System.out.println("Invalid Choice! Please try again.");
             }
 
+            // Pause before returning to main menu unless exiting
             if (!selectedOpt.equals("4")) {
                 System.out.println("\nPress Enter to return to main menu...");
                 sc.nextLine();
             }
             
-        } while (!selectedOpt.equals("4"));
+        } while (!selectedOpt.equals("4")); // Exit condition
         
         sc.close();
     }
@@ -78,7 +82,7 @@ public class Main {
         
         int choice;
         try {
-            choice = Integer.parseInt(sc.nextLine());
+            choice = Integer.parseInt(sc.nextLine()); // Convert input to integer
         } catch (NumberFormatException e) {
             System.out.println("Invalid input! Returning to main menu.");
             return;
@@ -86,6 +90,7 @@ public class Main {
         
         User newUser = null;
         
+        // Create corresponding user object based on selection
         switch (choice) {
             case 0:
                 System.out.println("Registration cancelled.");
@@ -104,7 +109,7 @@ public class Main {
                 return;
         }
         
-        // Call the registration method on the new user object
+        // Call the registration method if a user type was selected
         if (newUser != null) {
             newUser.userRegistration();
         }
