@@ -1,4 +1,5 @@
 ItemID,ItemName,Stock,Sold,UnitPrice,TotalSales
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 <<<<<<< HEAD
 B001,Baguette,9,31,18.9,585.90
@@ -13,6 +14,8 @@ K003,WaiChoong bread,0,100.00,0.00
 =======
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> 87c3c3c5b7dd4c30f5d82f9b87893e86d8769b07
 B001,Baguette,93,40,18.9,756.00
 B002,Garlic Bread,97,23,2.80,64.40
 B003,Mexico Bun,154,5,3.80,19.00
@@ -21,7 +24,10 @@ C002,Black Forest,185,15,20.80,312.00
 C003,Rum Raisin,200,0,24.80,0
 K001,Ginger Bread Cookies,200,0,6.80,0
 K002,Choco Chip Cookies,88,31,8.80,272.80
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 >>>>>>> refs/remotes/origin/main
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> 87c3c3c5b7dd4c30f5d82f9b87893e86d8769b07

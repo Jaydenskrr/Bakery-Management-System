@@ -352,7 +352,7 @@ public class User {
                 try {
                     // 1. Display menu
                     System.out.println("=== Welcome to Our Bakery ===");
-                    order.displayMenu();
+                    item.menu();
                     
                     // 2. Initialize cart
                     Cart cart = new Cart();
