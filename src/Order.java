@@ -220,9 +220,9 @@ public class Order {
         }
     }
     
-//    public enum PaymentStatus {
-//        PENDING, COMPLETED, FAILED
-//    }
+    public enum PaymentStatus {
+        PENDING, COMPLETED, FAILED
+    }
     
     private PaymentStatus paymentStatus;
     
@@ -254,12 +254,12 @@ public class Order {
             if (change > 0) {
                 System.out.printf("Change: RM%.2f\n", change);
             }
-            this.paymentStatus = PaymentStatus.COMPLETED;
+            paymentStatus = PaymentStatus.COMPLETED;
             System.out.println("Cash payment received. Thank you!");
             return true;
         } else {
             System.out.println("Insufficient cash provided.");
-            this.paymentStatus = PaymentStatus.FAILED;
+            paymentStatus = PaymentStatus.FAILED;
             return false;
         }
     }
@@ -287,7 +287,7 @@ public class Order {
                         amount, cardNumber.substring(12));
         System.out.println("Payment approved!");
         
-        this.paymentStatus = PaymentStatus.COMPLETED;
+        paymentStatus = PaymentStatus.COMPLETED;
         return true;
     }
     
@@ -329,4 +329,65 @@ public class Order {
 //            System.out.println("\n=== Test Completed ===");
 //        }
 //    }
+    
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        try {
+            // 1. Create a test order
+            System.out.println("=== Bakery Order Test ===");
+            Order testOrder = new Order("0123456789", "online");
+            
+            // 2. Create a test cart with items
+            Cart testCart = new Cart();
+            testCart.addItem("B001", 1); // Baguette
+            testCart.addItem("C001", 1); // Tiramisu
+            
+            // 3. Display cart contents
+            System.out.println("\n=== Order Summary ===");
+            testCart.displayCart();
+            double total = testCart.getTotal();
+            
+            // 4. Process payment
+            System.out.println("\n=== Payment Options ===");
+            System.out.println("1. Cash");
+            System.out.println("2. Credit Card");
+            System.out.print("Select payment method (1-2): ");
+            int paymentChoice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+            
+            boolean paymentSuccess;
+            if (paymentChoice == 1) {
+                paymentSuccess = testOrder.processPayment(total, "cash", scanner);
+            } else if (paymentChoice == 2) {
+                paymentSuccess = testOrder.processPayment(total, "card", scanner);
+            } else {
+                System.out.println("Invalid choice");
+                return;
+            }
+            
+            // 5. Complete order if payment succeeded
+            if (paymentSuccess) {
+                testOrder.completeOrder();
+                testCart.checkout(testOrder);
+                System.out.println("\n=== Order Details ===");
+                System.out.println("Order ID: " + testOrder.getOrderId());
+                System.out.println("Status: " + testOrder.getStatus());
+                System.out.println("Payment Status: " + testOrder.getPaymentStatus());
+                
+                // Display order history
+                System.out.println("\n=== Order History ===");
+                Order.displayCustomerHistory("0123456789");
+            } else {
+                System.out.println("Order not completed due to payment failure");
+            }
+            
+        } catch (Exception e) {
+            System.err.println("Error during order processing: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            scanner.close();
+            System.out.println("\n=== Test Completed ===");
+        }
+    }
 }
