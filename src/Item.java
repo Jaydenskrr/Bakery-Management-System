@@ -21,6 +21,7 @@ public class Item {
 	//to store each line read
 	String line = "";
 	
+	//ArrayLists used to copy the current data in CSV file
 	ArrayList<String> copy = new ArrayList<>();
 	ArrayList<String> update = new ArrayList<>();
 	
@@ -31,6 +32,8 @@ public class Item {
 			//calling BufferedReader rr to read from CSV file
 			rr = new BufferedReader(new FileReader(path));
 			rr.readLine();
+				
+			  // CLI formatting
 			  System.out.printf("%-8s %-22s %-10s %-10s %-10s %-15s%n", 
 			            "ID", "Item Name", "Price", "Stock", "Sold", "Total Sales");
 			        System.out.println("-------------------------------------------------------------------------------");
@@ -60,9 +63,12 @@ public class Item {
 		System.out.println("\n========== Kooks Menu ============");
 		try {
 			
+			// instantiating BufferedReader for this method
 			rr = new BufferedReader(new FileReader(path));
 			
 			rr.readLine();
+			
+			 // CLI formatting
 			 System.out.printf("%-8s %-22s %-12s %-8s\n", "ID", "Item Name", "Price", "Stock");
 		        System.out.println("-----------------------------------------------");
 		    
@@ -82,7 +88,7 @@ public class Item {
 	
 	
 	public void addItem() throws IOException {
-		
+		// printing options for user
 		System.out.println("Enter new item ID:" );
 		itemId = input.nextLine();
 		System.out.println("Enter new item name: ");
@@ -92,10 +98,11 @@ public class Item {
 		System.out.println("Enter unit price: ");
 		unitPrice = Double.parseDouble(input.nextLine());
 
-
+		// formatting how the data will be stored into the CSV file
 		String newData = String.format("%s,%s,%d,%.2f,%.2f", itemId, itemName, sold, unitPrice, totalSales);
 		
 		try {
+			// using the BufferedWriter to write new data entry into the CSV file 
 			uw = new BufferedWriter(new FileWriter(path,true));
 			uw.write(newData);
 			uw.newLine();
@@ -111,28 +118,29 @@ public class Item {
 	boolean itemFound = false;
 	
 	public void removeItem() throws IOException {
+		// used to search for itemId, to be compared with CSV file
 		String delete = "";
 		
 		System.out.println("Enter item ID you would like to delete: ");
 		delete = input.nextLine();
 		
-//		ArrayList<String> copy = new ArrayList<>();
-//		boolean itemFound = false;
 		
 		try {
 			rr = new BufferedReader(new FileReader(path));
-			
+			// used to search for data if or if not empty
 			String line = "";
-			
+			// to copy header
 			String header = rr.readLine();
 			if(header != null) {
 				copy.add(header);
 			}
-			
+
 			while((line = rr.readLine()) != null) {
 				String[] fields = line.split(",");
 			
-			
+			// checks if the fields read include the itemId we want to remove
+			// if it doesn't then it'll copy the line into the copy ArrayList
+			// else the boolean itemFound turns true
 				if(fields.length > 0 && !fields[0].equals(delete)) {
 					copy.add(line);
 				} else {
@@ -145,13 +153,14 @@ public class Item {
 			rr.close();
 		}
 		
+		// if itemId is not found sysout this line
 		if(!itemFound) {
 			System.out.println("Item was not found " +delete);
 		}
 		
 		try {
 			uw = new BufferedWriter(new FileWriter(path));
-			
+			// for loop to print out copied data and replace old data
 			for(String row : copy) {
 				uw.write(row);
 				uw.newLine();
@@ -165,10 +174,12 @@ public class Item {
 	}
 	
 	public void restock() throws IOException {
+		// set position of fields column
 		final int ID_COLUMN = 0;   
 		final int STOCK_COLUMN = 2; 
-		
+		// store itemId to be searched and changed
 		String append = "";
+		// new quantity to be added
 		int newQty;
 	
 		System.out.println("Enter the item ID you would like to append: ");
@@ -179,9 +190,11 @@ public class Item {
 		
 		try {
 			rr = new BufferedReader(new FileReader(path));
+			// search and check if line is empty
 			String line = "";
+			// found flag
 			Boolean found = false;
-			
+			// copy header
 			String header = rr.readLine();
 			if(header != null) {
 				update.add(header);
@@ -189,9 +202,11 @@ public class Item {
 			
 			while((line = rr.readLine()) != null) {
 				String[] fields = line.split(",");
-				
+			// if loop to search for the itemId to be edited	
 				if(fields.length >= 3 && fields[0].equals(append)) {
+					// reading old stock values from CSV, parseInt because storing in String [] array 
 	                int stock = Integer.parseInt(fields[STOCK_COLUMN]);
+	                // adding old quantity with new quantity
 					fields[STOCK_COLUMN] = String.valueOf(stock += newQty);
 					found = true;
 				
@@ -212,7 +227,7 @@ public class Item {
 		
 		try {
 			uw = new BufferedWriter(new FileWriter(path));
-			
+			// for loop to replace new data
 			for (String update: update) {
 				uw.write(update);
 				uw.newLine();
@@ -227,10 +242,12 @@ public class Item {
 	}
 	
 	public void editPrice() throws IOException {
+		// set position of fields column
 		final int ID_COLUMN = 0;   
 		final int PRICE_COLUMN = 4; 
-		
+		// store itemId to be searched and changed
 		String append = "";
+		// new price to be changed
 		double newPrice;
 	
 		System.out.println("Enter the item ID you would like to append: ");
@@ -241,9 +258,11 @@ public class Item {
 		
 		try {
 			rr = new BufferedReader(new FileReader(path));
+			// search and check if line is empty
 			String line = "";
+			// found flag
 			Boolean found = false;
-			
+			// copy header
 			String header = rr.readLine();
 			if(header != null) {
 				update.add(header);
@@ -253,7 +272,7 @@ public class Item {
 				String[] fields = line.split(",");
 				
 				if(fields.length >= 3 && fields[0].equals(append)) {
-//	                double price = Double.parseDouble(fields[PRICE_COLUMN]);
+					// reading old price values from CSV, String.valueOf because array is a String, but price is double 
 					fields[PRICE_COLUMN] = String.valueOf(newPrice);
 					found = true;
 				
@@ -274,7 +293,7 @@ public class Item {
 		
 		try {
 			uw = new BufferedWriter(new FileWriter(path));
-			
+			// for loop to replace old data with new data
 			for (String update: update) {
 				uw.write(update);
 				uw.newLine();
@@ -288,13 +307,6 @@ public class Item {
 		
 	}
 	
-	public static void main(String[] args) throws IOException {
-		Item open = new Item();
-//		open.addItem();
-//		open.removeItem();
-		open.report();
-		open.menu();
-	}
 }
 
 	
